@@ -50,14 +50,14 @@
     ;; </rule>
 
     ("U\\.K\\."
-     "[[:blank:]]")
+     "[[:blank:]][[:lower:]]")
     ;; <rule break="no">
     ;; <beforebreak>U\.K\.</beforebreak>
     ;; <afterbreak>\s</afterbreak>
     ;; </rule>
 
     ("U\\.S\\."
-     "[[:blank:]]")
+     "[[:blank:]][[:lower:]]")
 
     ("M\\."
      "[[:blank:]]")
