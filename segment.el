@@ -30,7 +30,7 @@
 ;;; Code:
 
 (require 'segment-regexes)
-(require 'sentence-navigation)
+;; (require 'sentence-navigation)
 
 (require 'xml)
 (require 'dom)
@@ -83,18 +83,18 @@
 
 ;;;###autoload
 (defun segment-forward-sentence ()
-  "Call `forward-sentece' one or more times.
+  "Call `forward-sentence' one or more times.
 Check if we are after any entries in `segment-regexes-en-alist',
 and if we are, run `forward-sentence' again and check again."
   (interactive)
   (forward-sentence)
   (while
-      (segment-look-back-map segment-regexes-en-alist)
+      (segment--looking-back-forward-map segment-regexes-en-alist)
     (forward-sentence)))
 
 ;;;###autoload
 (defun segment-backward-sentence ()
-  "Call `backward-sentece' one or more times.
+  "Call `backward-sentence' one or more times.
 Check if we are after any entries in `segment-regexes-en-alist',
 and if we are, run `backward-sentence' again and check again."
   (interactive)
