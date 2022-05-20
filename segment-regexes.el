@@ -33,26 +33,31 @@
 ;; NB: after-break rules must always be provided
 
 ;; conversion from ICU to emacs regex:
-(defvar segment-ICU-regex-conversion-alist
+(defvar segment-icu-regex-conversion-alist
   ;; For now these are written directly in ICU, so make no sense as elisp
   ;; strings
   ;; in order to use this to convert subsequent sets, we need to write ICU regexes in emacs syntax
-  '(("\s" "[[:space:]]")
+
+  ;; looks like any single slash needs no conversion once we string it in
+  ;; elisp
+  '(("\\\\s" "[[:space:]]")
     ;; capitals are negations \p{Lu} is upper \P{Lu} is not upper 
-    ("\p{Lu}\\|\P{Ll}" "[[:upper:]]")
-    ("\p{Ll}\\|\P{Lu}" "[[:lower:]]")
-    ("\P{Lu}" "[^[:upper:]]")
-    ("\." "\\.")
+    ("\\p{Lu}" "[[:upper:]]")
+    ;; ("\\P{Ll}" "[^[:lower:]]")
+    ("\\p{Ll}" "[[:lower:]]")
+    ;; ("\\P{Lu}" "[[:lower:]]")
+    ("\\P{Lu}" "[^[:upper:]]")
+    ;; ("\\." "\\.")
     ;; (?i) == (case-fold-search t)
-    ("\d" "[[:digit:]]")
-    ("(" "\\(")
-    (")" "\\)")
-    ("|" "\\|")
-    ("\b" "\\b")
-    ("\p{Ps}" "[[({]") ; any opening bracket
-    ("\p{pe}" "[])}]") ; any closing bracket
-    ("\p{L}" "[[:alpha:]]") ; any letter in any language
-    ("\p{N}" "[[:digit:]]")
+    ("\\\\d" "[[:digit:]]")
+    ("(" "\\\\(")
+    (")" "\\\\)")
+    ("|" "\\\\|")
+    ;; ("\b" "\\b")
+    ("\\p{Ps}" "[[({]") ; any opening bracket
+    ("\\p{pe}" "[])}]") ; any closing bracket
+    ("\\p{L}" "[[:alpha:]]") ; any letter in any language
+    ("\\p{N}" "[[:digit:]]")
     ;; ("{X,Y}" "\\{X,Y\\}") ; need match groups to convert this
     )
   "An alist of ICU regexes and their elisp equivalents.")
