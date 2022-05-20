@@ -60,7 +60,7 @@
   (let ((en-parsed (segment--parse-xml-file srx-file)))
     (segment-rules-english-create
      :language-rule-name (dom-attr en-parsed 'languagerulename)
-     :rules (segment-map-rules en-parsed))))
+     :rules (segment--map-rules en-parsed))))
 
 (defun segment--map-rules (dom)
   "Collect break rule, before-break and after-break regexes from DOM children."
