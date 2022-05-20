@@ -42,7 +42,7 @@
   break before-break after-break)
 
 ;;; parsing SRX files
-(defun segment-parse-xml-file (file)
+(defun segment--parse-xml-file (file)
   "Parse an XML FILE."
   ;; to use this we need to adapt our extraction functions:
   ;; (nxml-parse-file transcat-project-tmx-file))
@@ -50,25 +50,25 @@
     (insert-file-contents file)
     (xml-parse-region (point-min) (point-max))))
 
-(defun segment-get-rules-en (srx-file)
-  ""
-  (let ((en-parsed (segment-parse-xml-file srx-file)))
+(defun segment--get-rules-en (srx-file)
+  "Collect a set of rules from SRX-FILE."
+  (let ((en-parsed (segment--parse-xml-file srx-file)))
     (segment-rules-english-create
      :language-rule-name (dom-attr en-parsed 'languagerulename)
      :rules (segment-map-rules en-parsed))))
 
-(defun segment-map-rules (dom)
-  ""
+(defun segment--map-rules (dom)
+  "Collect break rule, before-break and after-break regexes from DOM children."
   (mapcar (lambda (x)
             (segment-rule-english-create
              :break (dom-attr (dom-by-tag x 'rule) 'break)
              :before-break (dom-text (dom-by-tag x 'beforebreak))
              :after-break (dom-text (dom-by-tag x 'afterbreak))))
-          (segment-get-children dom)))
+          (segment--get-children dom)))
 
 ;; TODO: fix this shit
-(defun segment-get-children (dom)
-  ""
+(defun segment--get-children (dom)
+  "Remove all newline/whitespace only entries from DOM."
   (remove "\n"
           (remove "\n    "
                   (remove "\n  "
@@ -92,11 +92,13 @@ and if we are, run `backward-sentence' again and check again."
   (interactive)
   (backward-sentence)
   (while
-      (segment--looking-back-forward-map segment-regexes-en-alist :moving-backward)
+      (segment--looking-back-forward-map segment-regexes-en-alist
+                                         :moving-backward)
     (backward-sentence)))
 
 (defun segment--looking-back-forward-map (regex-alist &optional moving-backward)
-  ""
+  "Return non-nil if we are at any of the segment rules in REGEX-ALIST.
+MOVING-BACKWARD modifies the check for when we have moved backwards."
   (let ((case-fold-search nil))
     (cl-dolist (x regex-alist)
       (when (and (looking-back
@@ -118,14 +120,16 @@ and if we are, run `backward-sentence' again and check again."
                    (looking-at (cadr x))))
         (cl-return x)))))
 
-(defun segment-get-before-break-rules-for-sentence-nav (regex-list)
+
+;; modify sentence-nav functions:
+(defun segment--get-before-break-rules-for-sentence-nav (regex-list)
   "Get all before break rules from REGEX-LIST."
   (mapcar (lambda (x)
-            (segment-strip-trailing-period
+            (segment--strip-trailing-period
              (car x)))
           regex-list))
 
-(defun segment-strip-trailing-period (regex)
+(defun segment--strip-trailing-period (regex)
   "Strip trailing slashes and period from string REGEX."
   (save-match-data
     (when (string-match ".\\(?2:\\\\\\.\\)$" regex)
@@ -139,7 +143,7 @@ and if we are, run `backward-sentence' again and check again."
 Add `segment.el' rules to `sentence-nav-abbreviation-list' beforehand."
   (interactive "p")
   (let ((sentence-nav-abbreviation-list
-         (append (segment-get-before-break-rules-for-sentence-nav
+         (append (segment--get-before-break-rules-for-sentence-nav
                   segment-regexes-en-alist)
                  sentence-nav-abbreviation-list)))
     (sentence-nav-forward arg)))
@@ -150,7 +154,7 @@ Add `segment.el' rules to `sentence-nav-abbreviation-list' beforehand."
 Add `segment.el' rules to `sentence-nav-abbreviation-list' beforehand."
   (interactive "p")
   (let ((sentence-nav-abbreviation-list
-         (append (segment-get-before-break-rules-for-sentence-nav
+         (append (segment--get-before-break-rules-for-sentence-nav
                   segment-regexes-en-alist)
                  sentence-nav-abbreviation-list)))
     (sentence-nav-backward arg)))
@@ -161,7 +165,7 @@ Add `segment.el' rules to `sentence-nav-abbreviation-list' beforehand."
 Add `segment.el' rules to `sentence-nav-abbreviation-list' beforehand."
   (interactive "p")
   (let ((sentence-nav-abbreviation-list
-         (append (segment-get-before-break-rules-for-sentence-nav
+         (append (segment--get-before-break-rules-for-sentence-nav
                   segment-regexes-en-alist)
                  sentence-nav-abbreviation-list)))
     (sentence-nav-forward-end arg)))
@@ -172,7 +176,7 @@ Add `segment.el' rules to `sentence-nav-abbreviation-list' beforehand."
 Add `segment.el' rules to `sentence-nav-abbreviation-list' beforehand."
   (interactive "p")
   (let ((sentence-nav-abbreviation-list
-         (append (segment-get-before-break-rules-for-sentence-nav
+         (append (segment--get-before-break-rules-for-sentence-nav
                   segment-regexes-en-alist)
                  sentence-nav-abbreviation-list)))
     (sentence-nav-backward-end arg)))
