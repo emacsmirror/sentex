@@ -6,6 +6,12 @@ OmegaT and the Okapi Framework use ICU regular expressions stored in SRX files (
 
 For now, only some English rules have been ported, and only two movement functions exist: =segment-forward-sentence= and =segment-backward-sentence=.
 
-As this is new code, it hasn't been tested much at all. In particular, I don't yet know how it interacts with custom =sentence-end= values, or other possible snags, such as anyone else's Emacs other than mine.
+As this is new code, it hasn't been tested much at all. In particular, I don't yet know how it interacts with custom =sentence-end= values, or other possible snags, such as anyone else's Emacs other than mine (or even mine).
 
-Some functions are also included which add the before-break rules to [[https://github.com/noctuid/emacs-sentence-navigation][emacs-sentence-navigation]]'s abbreviation list and then calls its sentence movement functions. As I don't know that code very well, I'm not yet sure how to implement the after-break rules.
+Some functions are also included which add the before-break rules to [[https://github.com/noctuid/emacs-sentence-navigation][emacs-sentence-navigation]]'s abbreviation list and then call on of its sentence movement functions. As I don't know that code very well, I'm not yet sure how to implement the after-break rules.
+
+* features
+
+- doesn't tell you to shut up and use two spaces for periods (what if you're not the one typing the spaces after any of the periods, and you have a whole book of periods? are you doing to tell me to use a regex to replace all the single space periods with double spaces...?)
+- doesn't assume sentences begin with a capital letter.
+- should work with filled text.
