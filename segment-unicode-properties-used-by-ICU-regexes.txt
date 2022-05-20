@@ -1,4 +1,5 @@
 ;; from https://www.regular-expressions.info/unicode.html
+;; see also https://unicode-org.github.io/icu/userguide/strings/regexp.html#regular-expression-metacharacters
 
 UNICODE PROPERTIES:
 
