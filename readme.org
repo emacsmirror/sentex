@@ -1,0 +1,9 @@
+* segment
+
+This repo is an attempt to port sentence ending rules from OmegaT and the Okapi Framework to Emacs Lisp.
+
+OmegaT and the Okapi Framework use ICU regular expressions stored in SRX files to create sophisticated rules for segmenting texts. Each rule has a before break and after break regular expression, as well as a boolean break or don't break value.
+
+For now, only some English rules have been ported, and only before break rules are handled. For really reliable sentence ending rules (i.e. break after "5 p.m." in "Let's meet at 5 p.m. It was..." but not in "I met her at 5 p.m. and went to the movies") you need to handle after break rules also.
+
+Some functions are also included which add the before-break rules to =sentence-navigation='s abbreviation list and then calls its sentence movement functions.
