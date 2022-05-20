@@ -74,6 +74,50 @@
                   (remove "\n  "
                           (dom-children dom)))))
 
+;; roll our own movement cmds:
+(defun segment-forward-sentence ()
+  "Call `forward-sentece' one or more times.
+Check if we are after any entries in `segment-regexes-en-alist',
+and if we are, run `forward-sentence' again and check again."
+  (interactive)
+  (forward-sentence)
+  (while
+      (segment-look-back-map segment-regexes-en-alist)
+    (forward-sentence)))
+
+(defun segment-backward-sentence ()
+  "Call `backward-sentece' one or more times.
+Check if we are after any entries in `segment-regexes-en-alist',
+and if we are, run `backward-sentence' again and check again."
+  (interactive)
+  (backward-sentence)
+  (while
+      (segment--looking-back-forward-map segment-regexes-en-alist :moving-backward)
+    (backward-sentence)))
+
+(defun segment--looking-back-forward-map (regex-alist &optional moving-backward)
+  ""
+  (let ((case-fold-search nil))
+    (cl-dolist (x regex-alist)
+      (when (and (looking-back
+                  ;; before-break regex
+                  (if moving-backward
+                      ;; we are after any whitespace
+                      (concat (car x)
+                              "[[:blank:]]*")
+                    (car x))
+                  ;; limit arg:
+                  (save-excursion (backward-word 2)
+                                  (point)))
+                 ;; after-break regex:
+                 (if moving-backward
+                     ;; we are after any whitespace:
+                     (save-excursion
+                       (forward-whitespace -1) ; back over whitespace
+                       (looking-at (cadr x)))
+                   (looking-at (cadr x))))
+        (cl-return x)))))
+
 (defun segment-get-before-break-rules-for-sentence-nav (regex-list)
   "Get all before break rules from REGEX-LIST."
   (mapcar (lambda (x)
