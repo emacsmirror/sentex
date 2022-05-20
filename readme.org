@@ -2,8 +2,10 @@
 
 This repo is an attempt to port sentence ending rules from OmegaT and the Okapi Framework to Emacs Lisp.
 
-OmegaT and the Okapi Framework use ICU regular expressions stored in SRX files to create sophisticated rules for segmenting texts. Each rule has a before break and after break regular expression, as well as a boolean break or don't break value.
+OmegaT and the Okapi Framework use ICU regular expressions stored in SRX files (copied into this repo) to create sophisticated rules for segmenting texts. Each rule has a before break and after break regular expression, as well as a boolean break or don't break value.
 
-For now, only some English rules have been ported, and only before break rules are handled. For really reliable sentence ending rules (i.e. break after "5 p.m." in "Let's meet at 5 p.m. It was..." but not in "I met her at 5 p.m. and went to the movies") you need to handle after break rules also.
+For now, only some English rules have been ported, and only two movement functions exist: =segment-forward-sentence= and =segment-backward-sentence=.
 
-Some functions are also included which add the before-break rules to [[https://github.com/noctuid/emacs-sentence-navigation][emacs-sentence-navigation]]'s abbreviation list and then calls its sentence movement functions.
+As this is new code, it hasn't been tested much at all. In particular, I don't yet know how it interacts with custom =sentence-end= values, or other possible snags, such as anyone else's Emacs other than mine.
+
+Some functions are also included which add the before-break rules to [[https://github.com/noctuid/emacs-sentence-navigation][emacs-sentence-navigation]]'s abbreviation list and then calls its sentence movement functions. As I don't know that code very well, I'm not yet sure how to implement the after-break rules.
