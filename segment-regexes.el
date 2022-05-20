@@ -94,6 +94,10 @@
     ;; <afterbreak>\s</afterbreak>
     ;; </rule>
 
+    ("[JS]r\\."
+     "[[:blank:]][[:lower:]]")
+    ;; Sr. / Jr. can end a sentence, so the rule this is from below is wrong
+
     ("[Ee]\\.g\\."
      "[[:blank:]]")
     ;; <rule break="no">
