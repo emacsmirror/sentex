@@ -20,8 +20,12 @@
 
 ;;; Commentary:
 
-;; This code just parses the srx rule files.
-;; ported from OmegaT and Okapi Framework
+;; This package uses breaking and non-breaking sentence-ending rules ported
+;; from OmegaT and Okapi Framework.
+
+;; it's very green. for now only some English rules are ported, and it only
+;; provides `segment-forward-sentence' and `segment-backward-sentence'
+;; commands for movement that respects the rules.
 
 ;;; Code:
 
@@ -35,6 +39,7 @@
   "Sentence segmentation regexes."
   :group 'editing)
 
+;; (useless) code for collecting ICU regexes into lists:
 (cl-defstruct (segment-rules-english (:constructor segment-rules-english-create))
   language-rule-name rules)
 
@@ -137,8 +142,6 @@ MOVING-BACKWARD modifies the check for when we have moved backwards."
   (save-match-data
     (when (string-match ".\\(?2:\\\\\\.\\)$" regex)
       (replace-match "" t nil regex 2))))
-
-;; modify sentence-nav functions:
 
 ;;;###autoload
 (defun segment-sentence-nav-forward (&optional arg)
