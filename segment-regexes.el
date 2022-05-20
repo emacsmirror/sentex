@@ -30,7 +30,8 @@
 
 ;; TODO: add a break yes/no to every item?
 
-;; NB: after-break rules are only needed if they're different to [[:blank:]]
+;; NB: after-break rules must always be provided
+
 
 (defcustom segment-regexes-en-alist
   '(
@@ -313,7 +314,7 @@
     ;; </rule>
     ;; <rule break="no">
 
-    ("\\bet\\b[[:blank:]]al\\.[[:blank:]]" nil)
+    ("\\bet\\b[[:blank:]]al\\.[[:blank:]]" "")
     ;; <beforebreak>\bet\b\s\bal\.\s</beforebreak>
     ;; <afterbreak></afterbreak>
     ;; </rule>
@@ -334,30 +335,30 @@
     ;; </rule>
     ;; <rule break="no">
 
-    ("\\bInc\\.[[:blank:]]" nil)
+    ("\\bInc\\.[[:blank:]]" "")
     ;; <beforebreak>\bInc\.\s</beforebreak>
     ;; <afterbreak></afterbreak>
     ;; </rule>
 
-    ("\\bCorp\\.[[:blank:]]" nil)
+    ("\\bCorp\\.[[:blank:]]" "")
     ;; <rule break="no">
     ;; <beforebreak>\bCorp\.\s</beforebreak>
     ;; <afterbreak></afterbreak>
     ;; </rule>
 
-    ("\\bBros\\.[[:blank:]]" nil)
+    ("\\bBros\\.[[:blank:]]" "")
     ;; <rule break="no">
     ;; <beforebreak>\bBros\.\s</beforebreak>
     ;; <afterbreak></afterbreak>
     ;; </rule>
 
-    ("\\bDist\\.[[:blank:]]" nil)
+    ("\\bDist\\.[[:blank:]]" "")
     ;; <rule break="no">
     ;; <beforebreak>\bDist\.\s</beforebreak>
     ;; <afterbreak></afterbreak>
     ;; </rule>
 
-    ("\\bCo\\.[[:blank:]]" nil)
+    ("\\bCo\\.[[:blank:]]" "")
     ;; <rule break="no">
     ;; <beforebreak>\bCo\.\s</beforebreak>
     ;; <afterbreak></afterbreak>
@@ -405,27 +406,31 @@
     ;; </rule>
 
     ;; three stops as ellipsis, poss surrounded in [] or ()
-    ("[[(]*\\.\\.\\.[])]*" nil)
+    ("[[(]*\\.\\.\\.[])]*"
+     "[[:lower:]]")
     ;; <rule break="no">
     ;; <beforebreak>[\[\(]*\.\.\.[\]\)]* </beforebreak>
     ;; <afterbreak>[^\p{Lu}]</afterbreak>
     ;; </rule>
 
-    ("\\b[[:lower:]]\\.[[:blank:]][[:lower:]]\\.[[:blank:]]" nil)
+    ("\\b[[:lower:]]\\.[[:blank:]][[:lower:]]\\.[[:blank:]]"
+     "")
     ;; <rule break="no">
     ;; <beforebreak>\b\p{Lu}\.\s\p{Lu}\.\s</beforebreak>
     ;; <afterbreak></afterbreak>
     ;; </rule>
 
-    ("\\b[[:lower:]]\\.[[:lower:]]\\.[[:blank:]]" nil)
+    ("\\b[[:lower:]]\\.[[:lower:]]\\.[[:blank:]]"
+     "")
     ;; <rule break="no">
     ;; <beforebreak>\b\p{Lu}\.\p{Lu}\.\s</beforebreak>
     ;; <afterbreak></afterbreak>
     ;; </rule>
 
-    ;; Name initials:
+    ;; Name initials (capital not preceded by period):
 
-    ("[^\\.][[:blank:]][A-Z]\\.[[:blank:]]" nil)
+    ("[^\\.][[:blank:]][A-Z]\\.[[:blank:]]"
+     "")
     ;; <rule break="no">
     ;; <beforebreak>[^\.]\s[A-Z]\.\s</beforebreak>
     ;; <afterbreak></afterbreak>
