@@ -74,6 +74,18 @@
                   (remove "\n  "
                           (dom-children dom)))))
 
+(defun segment-get-before-break-rules-for-sentence-nav (regex-list)
+  "Get all before break rules from REGEX-LIST."
+  (mapcar (lambda (x)
+            (segment-strip-trailing-period
+             (car x)))
+          regex-list))
+
+(defun segment-strip-trailing-period (regex)
+  "Strip trailing slashes and period from string REGEX."
+  (save-match-data
+    (when (string-match ".\\(?2:\\\\\\.\\)$" regex)
+      (replace-match "" t nil regex 2))))
 
 ;; modify sentence-nav functions:
 
