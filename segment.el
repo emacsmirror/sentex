@@ -75,6 +75,8 @@
                           (dom-children dom)))))
 
 ;; roll our own movement cmds:
+
+;;;###autoload
 (defun segment-forward-sentence ()
   "Call `forward-sentece' one or more times.
 Check if we are after any entries in `segment-regexes-en-alist',
@@ -85,6 +87,7 @@ and if we are, run `forward-sentence' again and check again."
       (segment-look-back-map segment-regexes-en-alist)
     (forward-sentence)))
 
+;;;###autoload
 (defun segment-backward-sentence ()
   "Call `backward-sentece' one or more times.
 Check if we are after any entries in `segment-regexes-en-alist',
