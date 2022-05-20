@@ -6,4 +6,4 @@ OmegaT and the Okapi Framework use ICU regular expressions stored in SRX files t
 
 For now, only some English rules have been ported, and only before break rules are handled. For really reliable sentence ending rules (i.e. break after "5 p.m." in "Let's meet at 5 p.m. It was..." but not in "I met her at 5 p.m. and went to the movies") you need to handle after break rules also.
 
-Some functions are also included which add the before-break rules to =sentence-navigation='s abbreviation list and then calls its sentence movement functions.
+Some functions are also included which add the before-break rules to [[https://github.com/noctuid/emacs-sentence-navigation][emacs-sentence-navigation]]'s abbreviation list and then calls its sentence movement functions.
