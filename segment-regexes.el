@@ -28,9 +28,7 @@
 
 ;;; Code:
 
-;; can we just make a plist of before/after regexes? no.
-;; TODO: put the regexes into a decent data type, prob an alist
-;; then you can iterate over the car of every alist element, and check its cdr if you match?
+;; TODO: add a break yes/no to every item?
 
 ;; NB: after-break rules are only needed if they're different to [[:blank:]]
 
