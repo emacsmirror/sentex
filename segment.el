@@ -41,7 +41,7 @@
 (cl-defstruct (segment-rule-english (:constructor segment-rule-english-create))
   break before-break after-break)
 
-;;; parsing files
+;;; parsing SRX files
 (defun segment-parse-xml-file (file)
   "Parse an XML FILE."
   ;; to use this we need to adapt our extraction functions:
@@ -113,7 +113,7 @@ Add `segment.el' rules to `sentence-nav-abbreviation-list' beforehand."
 
 ;;;###autoload
 (defun segment-sentence-nav-forward-end (&optional arg)
-  "Move to the start of the next sentence end ARG times.
+  "Move to the end of the next sentence end ARG times.
 Add `segment.el' rules to `sentence-nav-abbreviation-list' beforehand."
   (interactive "p")
   (let ((sentence-nav-abbreviation-list
@@ -124,7 +124,7 @@ Add `segment.el' rules to `sentence-nav-abbreviation-list' beforehand."
 
 ;;;###autoload
 (defun sentence-nav-backward-end (&optional arg)
-  "Move to the start of the previous sentence end ARG times.
+  "Move to the end of the previous sentence end ARG times.
 Add `segment.el' rules to `sentence-nav-abbreviation-list' beforehand."
   (interactive "p")
   (let ((sentence-nav-abbreviation-list
