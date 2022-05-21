@@ -1,9 +1,13 @@
-;; segment-regexes.el --- regexes for sentence segmentation rules  -*- lexical-binding: t; -*-
+;;; segment-regexes.el --- Regexes for sentence segmentation rules  -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2022  marty hiatt
+;; Copyright (C) 2022 Marty Hiatt <martianhiatus AT riseup.net>
+;; Author: Marty Hiatt <martianhiatus AT riseup.net>
+;; Version: 0.1
+;; URL: https://codeberg.org/martianh/segment
+;; Package-Requires: ((emacs "27.1"))
+;; Keywords: languages, convenience, translation, sentences, text
 
-;; Author: marty hiatt <martianhiatus [a t] riseup [d o t] net>
-;; Keywords: languages, convenience, translation, sentences, text, regular expressions
+;;; License:
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by

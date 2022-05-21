@@ -1,8 +1,10 @@
-;;; segment.el --- regexes for sentence segmentation rules  -*- lexical-binding: t; -*-
+;;; segment.el --- Regexes for sentence segmentation rules  -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2022  marty hiatt
-
-;; Author: marty hiatt <martianhiatus [a t] riseup [d o t] net>
+;; Copyright (C) 2022 Marty Hiatt <martianhiatus AT riseup.net>
+;; Author: Marty Hiatt <martianhiatus AT riseup.net>
+;; Version: 0.1
+;; URL: https://codeberg.org/martianh/segment
+;; Package-Requires: ((emacs "27.1"))
 ;; Keywords: languages, convenience, translation, sentences, text
 
 ;; This program is free software; you can redistribute it and/or modify
@@ -23,13 +25,14 @@
 ;; This package uses breaking and non-breaking sentence-ending rules ported
 ;; from OmegaT and Okapi Framework.
 
-;; it's very green. for now only some English rules are ported, and it only
+;; It's very green. for now only some English rules are ported, and it only
 ;; provides `segment-forward-sentence' and `segment-backward-sentence'
 ;; commands for movement that respects the rules.
 
 ;;; Code:
 
 (require 'segment-regexes)
+(require 'segment-convert)
 ;; (require 'sentence-navigation)
 
 (require 'xml)
@@ -139,7 +142,7 @@ Add `segment.el' rules to `sentence-nav-abbreviation-list' beforehand."
     (sentence-nav-forward-end arg)))
 
 ;;;###autoload
-(defun sentence-nav-backward-end (&optional arg)
+(defun segment-sentence-nav-backward-end (&optional arg)
   "Move to the end of the previous sentence end ARG times.
 Add `segment.el' rules to `sentence-nav-abbreviation-list' beforehand."
   (interactive "p")

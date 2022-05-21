@@ -1,9 +1,11 @@
-;;; segment-convert.el --- convert srx ICU regexes to elisp  -*- lexical-binding: t; -*-
+;;; segment-convert.el --- Convert srx ICU regexes to elisp  -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2022  marty hiatt
-
-;; Author: marty hiatt <martianhiatus [a t] riseup [d o t] net
-;; Keywords: languages, convenience, translation, sentences, text, regular expressions
+;; Copyright (C) 2022 Marty Hiatt <martianhiatus AT riseup.net>
+;; Author:Marty Hiatt <martianhiatus AT riseup.net>
+;; Version: 0.1
+;; URL: https://codeberg.org/martianh/segment
+;; Package-Requires: ((emacs "27.1"))
+;; Keywords: languages, convenience, translation, sentences, text
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
