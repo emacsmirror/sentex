@@ -2,7 +2,7 @@
 
 ;; Copyright (C) 2022  marty hiatt
 
-;; Author: marty hiatt <martianhiatus [A T] riseup [D o t] net>
+;; Author: marty hiatt <martianhiatus [a t] riseup [d o t] net>
 ;; Keywords: languages, convenience, translation, sentences, text
 
 ;; This program is free software; you can redistribute it and/or modify

@@ -3,7 +3,7 @@
 ;; Copyright (C) 2022  marty hiatt
 
 ;; Author: marty hiatt <martianhiatus [a t] riseup [d o t] net>
-;; Keywords: languages, convenience, translation, sentences, text
+;; Keywords: languages, convenience, translation, sentences, text, regular expressions
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -20,15 +20,15 @@
 
 ;;; Commentary:
 
-;; regexes for complex sentence segmentation rules.
-;; ported from OmegaT and Okapi Framework default/English srx rules.
+;; Regexes for complex sentence segmentation rules.
+;; Roughly ported from OmegaT and Okapi Framework default/English srx rules.
 
 ;; each rule has two regexes, before and after, to facilitate sophisticated
-;; conditional breaks, such as only if regex X is followed by regex Y.
+;; conditional breaks, such as break only if regex X is followed by regex Y.
 
 ;;; Code:
 
-;; TODO: add a break yes/no to every item?
+;; TODO: add a break yes/no to every item? or do we do that in the struct
 
 ;; NB: after-break rules must always be provided
 
