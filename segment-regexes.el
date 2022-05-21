@@ -37,15 +37,6 @@
   "Holds the composite list of en regexes.
 \nRun `segment-regexes-construct-en-list' to obtain the overall value.")
 
-(defun segment-regexes-construct-en-list ()
-  "Return the full collection of regex rules for English."
-  (setq segment-regexes-en-list
-        ;; TODO: work out correct order, poss make optional
-        (append
-         segment-regexes-additional-en-list
-         segment-regexes-omegat-en-list
-         segment-regexes-okapi-en-list)))
-
 (defconst segment-regexes-omegat-en-list
   '(
     ;; Omega defaultRules.srx (English):
@@ -517,6 +508,15 @@
 Used for ending or not ending sentences."
   :group 'segment-regexes
   :type 'plist)
+
+(defun segment-regexes--construct-en-list ()
+  "Return the full collection of regex rules for English."
+  (setq segment-regexes-en-list
+        ;; TODO: work out correct order, poss make optional
+        (append
+         segment-regexes-additional-en-list
+         segment-regexes-omegat-en-list
+         segment-regexes-okapi-en-list)))
 
 (provide 'segment-regexes)
 ;;; segment-regexes.el ends here

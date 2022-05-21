@@ -50,7 +50,7 @@ and if we are, run `forward-sentence' again and check again."
   (forward-sentence)
   (while
       (segment--looking-back-forward-map
-       (segment-regexes-construct-en-list))
+       (segment-regexes--construct-en-list))
     (forward-sentence)))
 
 ;;;###autoload
@@ -62,7 +62,7 @@ and if we are, run `backward-sentence' again and check again."
   (backward-sentence)
   (while
       (segment--looking-back-forward-map
-       (segment-regexes-construct-en-list)
+       (segment-regexes--construct-en-list)
        :moving-backward)
   (backward-sentence))
 
@@ -112,7 +112,7 @@ Add `segment.el' rules to `sentence-nav-abbreviation-list' beforehand."
   (interactive "p")
   (let ((sentence-nav-abbreviation-list
          (append (segment--get-before-break-rules-for-sentence-nav
-                  (segment-regexes-construct-en-list)
+                  (segment-regexes--construct-en-list)
                   sentence-nav-abbreviation-list)))
         (sentence-nav-forward arg)))
 
@@ -123,7 +123,7 @@ Add `segment.el' rules to `sentence-nav-abbreviation-list' beforehand."
     (interactive "p")
     (let ((sentence-nav-abbreviation-list
            (append (segment--get-before-break-rules-for-sentence-nav
-                    (segment-regexes-construct-en-list))
+                    (segment-regexes--construct-en-list))
                    sentence-nav-abbreviation-list)))
       (sentence-nav-backward arg)))
 
@@ -134,7 +134,7 @@ Add `segment.el' rules to `sentence-nav-abbreviation-list' beforehand."
     (interactive "p")
     (let ((sentence-nav-abbreviation-list
            (append (segment--get-before-break-rules-for-sentence-nav
-                    (segment-regexes-construct-en-list))
+                    (segment-regexes--construct-en-list))
                    sentence-nav-abbreviation-list)))
       (sentence-nav-forward-end arg)))
 
@@ -145,7 +145,7 @@ Add `segment.el' rules to `sentence-nav-abbreviation-list' beforehand."
     (interactive "p")
     (let ((sentence-nav-abbreviation-list
            (append (segment--get-before-break-rules-for-sentence-nav
-                    (segment-regexes-construct-en-list))
+                    (segment-regexes--construct-en-list))
                    sentence-nav-abbreviation-list)))
       (sentence-nav-backward-end arg)))
 
