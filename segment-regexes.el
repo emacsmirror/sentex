@@ -33,7 +33,9 @@
 
 ;; NB: after-break rules must always be provided
 
-(defvar segment-regexes-en-list nil)
+(defvar segment-regexes-en-list nil
+  "Holds the composite list of en regexes.
+\nRun `segment-regexes-construct-en-list' to obtain the overall value.")
 
 (defun segment-regexes-construct-en-list ()
   "Return the full collection of regex rules for English."

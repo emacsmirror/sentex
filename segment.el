@@ -145,7 +145,7 @@ Add `segment.el' rules to `sentence-nav-abbreviation-list' beforehand."
     (interactive "p")
     (let ((sentence-nav-abbreviation-list
            (append (segment--get-before-break-rules-for-sentence-nav
-                    (segment-regexes-construct-en-list))  
+                    (segment-regexes-construct-en-list))
                    sentence-nav-abbreviation-list)))
       (sentence-nav-backward-end arg)))
 
