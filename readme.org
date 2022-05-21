@@ -10,6 +10,10 @@ As this is new code, it hasn't been tested much at all. In particular, I don't y
 
 Some functions are also included which add the before-break rules to [[https://github.com/noctuid/emacs-sentence-navigation][emacs-sentence-navigation]]'s abbreviation list and then call on of its sentence movement functions. As I don't know that code very well, I'm not yet sure how to implement the after-break rules.
 
+* converting the whole ruleset
+
+I'm also hoping to programmatically convert the rulesets for all languages that have one. Converting regular expression syntax using regular expressions is a headfuck though. Work so far is in =segment-convert.el=.
+
 * features
 
 - doesn't tell you to shut up and use two spaces for periods (what if you're not the one typing the spaces after any of the periods, and you have a whole book of periods? are you doing to tell me to use a regex to replace all the single space periods with double spaces...?)
