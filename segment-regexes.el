@@ -522,5 +522,183 @@ Used for ending or not ending sentences."
          segment-regexes-omegat-en-list
          segment-regexes-okapi-en-list)))
 
+
+;;; omegat French rules:
+
+(defconst segment-regexes-omegat-fr-list
+  '(
+    ;; <languagerule languagerulename="French">
+
+
+    ;; <rule break="no">
+    ;; <beforebreak>pp\.</beforebreak>
+    ;; <afterbreak>\s</afterbreak>
+    ;; </rule>
+
+    ;; <rule break="no">
+    ;; <beforebreak>[^a-z]p\.</beforebreak>
+    ;; <afterbreak>\s</afterbreak>
+    ;; </rule>
+
+
+    ;; <rule break="no">
+    ;; <beforebreak>([A-Z]\.){2,}</beforebreak>
+    ;; <afterbreak>\s</afterbreak>
+    ;; </rule>
+
+    ;; <rule break="no">
+    ;; <beforebreak>^M\.</beforebreak>
+    ;; <afterbreak>\s</afterbreak>
+    ;; </rule>
+
+
+    ;; <rule break="no">
+    ;; <beforebreak>MM\.</beforebreak>
+    ;; <afterbreak>\s</afterbreak>
+    ;; </rule>
+
+
+    ;; <rule break="no">
+    ;; <beforebreak>[^A-Z]M\.</beforebreak>
+    ;; ;; <afterbreak>\s</afterbreak>
+    ;; ;; </rule>
+
+
+    ;; ;; <rule break="no">
+    ;; ;; <beforebreak>etc\.</beforebreak>
+    ;; ;; <afterbreak>\s[a-z]</afterbreak>
+    ;; ;; </rule>
+
+
+    ;; <rule break="no">
+    ;; <beforebreak>Mr\.</beforebreak>
+    ;; <afterbreak>\s</afterbreak>
+    ;; </rule>
+
+
+    ;; <rule break="no">
+    ;; <beforebreak>Mme\.</beforebreak>
+    ;; <afterbreak>\s</afterbreak>
+    ;; </rule>
+
+
+    ;; <rule break="no">
+    ;; <beforebreak>Dr\.</beforebreak>
+    ;; <afterbreak>\s</afterbreak>
+    ;; </rule>
+
+
+    ;; <rule break="no">
+    ;; <beforebreak>Mlle\.</beforebreak>
+    ;; <afterbreak>\s</afterbreak>
+    ;; </rule>
+
+
+    ;; <rule break="no">
+    ;; <beforebreak>Prof\.</beforebreak>
+    ;; <afterbreak>\s</afterbreak>
+    ;; </rule>
+
+
+    ;; <rule break="no">
+    ;; <beforebreak>Resp\.</beforebreak>
+    ;; <afterbreak>\s</afterbreak>
+    ;; </rule>
+
+
+    ;; <rule break="no">
+    ;; <beforebreak>Réf\.</beforebreak>
+    ;; <afterbreak>\s</afterbreak>
+    ;; </rule>
+
+
+    ;; <rule break="no">
+    ;; <beforebreak>réf\.</beforebreak>
+    ;; <afterbreak>\s</afterbreak>
+    ;; </rule>
+
+
+    ;; <rule break="no">
+    ;; <beforebreak>C\.A\.</beforebreak>
+    ;; <afterbreak>\s</afterbreak>
+    ;; </rule>
+
+
+    ;; <rule break="no">
+    ;; <beforebreak>C\.\sA\.</beforebreak>
+    ;; <afterbreak>\s</afterbreak>
+    ;; </rule>
+
+
+    ;; <rule break="no">
+    ;; <beforebreak>\s[A-Z]\.</beforebreak>
+    ;; <afterbreak>\s</afterbreak>
+    ;; </rule>
+
+
+    ;; <rule break="no">
+    ;; <beforebreak>Cf\.</beforebreak>
+    ;; <afterbreak>\s</afterbreak>
+    ;; </rule>
+
+
+    ;; <rule break="no">
+    ;; <beforebreak>cf\.</beforebreak>
+    ;; <afterbreak>\s</afterbreak>
+    ;; </rule>
+
+
+    ;; <rule break="no">
+    ;; <beforebreak>(A|a)rt\.</beforebreak>
+    ;; <afterbreak>\s</afterbreak>
+    ;; </rule>
+
+
+    ;; <rule break="no">
+    ;; <beforebreak>(A|a)rt\.</beforebreak>
+    ;; <afterbreak>\d+</afterbreak>
+    ;; </rule>
+
+
+    ;; <rule break="no">
+    ;; <beforebreak>[Vv]ol\.</beforebreak>
+    ;; <afterbreak>\s</afterbreak>
+    ;; </rule>
+
+
+    ;; <rule break="no">
+    ;; <beforebreak>i\.e\.</beforebreak>
+    ;; <afterbreak>\s</afterbreak>
+    ;; </rule>
+
+
+    ;; <rule break="no">
+    ;; <beforebreak>St\.</beforebreak>
+    ;; <afterbreak>\s</afterbreak>
+    ;; </rule>
+
+
+    ;; <rule break="no">
+    ;; <beforebreak>\.</beforebreak>
+    ;; <afterbreak>\s[a-z]</afterbreak>
+    ;; </rule>
+
+
+    ;; <rule break="no">
+    ;; <beforebreak>\.</beforebreak>
+    ;; <afterbreak>[\u00A0\s]»</afterbreak>
+    ;; </rule>
+
+
+    ;; <rule break="no">
+    ;; <beforebreak>[\.\?\!][\u00A0\s]»</beforebreak>
+    ;; <afterbreak>\s</afterbreak>
+    ;; </rule>
+
+
+    ;; </languagerule>
+    ))
+
+
 (provide 'segment-regexes)
 ;;; segment-regexes.el ends here
