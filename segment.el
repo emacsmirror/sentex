@@ -39,46 +39,6 @@
   "Sentence segmentation regexes."
   :group 'editing)
 
-;; (useless) code for collecting ICU regexes into lists:
-(cl-defstruct (segment-rules-english (:constructor segment-rules-english-create))
-  language-rule-name rules)
-
-(cl-defstruct (segment-rule-english (:constructor segment-rule-english-create))
-  break before-break after-break)
-
-;;; parsing SRX files
-(defun segment--parse-xml-file (file)
-  "Parse an XML FILE."
-  ;; to use this we need to adapt our extraction functions:
-  ;; (nxml-parse-file transcat-project-tmx-file))
-  (with-temp-buffer
-    (insert-file-contents file)
-    (xml-parse-region (point-min) (point-max))))
-
-(defun segment--get-rules-en (srx-file)
-  "Collect a set of rules from SRX-FILE."
-  (let ((en-parsed (segment--parse-xml-file srx-file)))
-    (segment-rules-english-create
-     :language-rule-name (dom-attr en-parsed 'languagerulename)
-     :rules (segment--map-rules en-parsed))))
-
-(defun segment--map-rules (dom)
-  "Collect break rule, before-break and after-break regexes from DOM children."
-  (mapcar (lambda (x)
-            (segment-rule-english-create
-             :break (dom-attr (dom-by-tag x 'rule) 'break)
-             :before-break (dom-text (dom-by-tag x 'beforebreak))
-             :after-break (dom-text (dom-by-tag x 'afterbreak))))
-          (segment--get-children dom)))
-
-;; TODO: fix this shit
-(defun segment--get-children (dom)
-  "Remove all newline/whitespace only entries from DOM."
-  (remove "\n"
-          (remove "\n    "
-                  (remove "\n  "
-                          (dom-children dom)))))
-
 ;; roll our own movement cmds:
 
 ;;;###autoload
