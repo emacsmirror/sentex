@@ -51,8 +51,8 @@
     ("\\p{pe}" "[])}]") ; any closing bracket
     ("\\p{L}" "[[:alpha:]]") ; any letter in any language
     ("\\p{N}" "[[:digit:]]")
-    ("\\p{Po}" "[^][(){}\"_-]") ; FIXME:
-    ;; \p{Po}: any kind of punctuation character that is not a dash, bracket, quote or connector.
+    ;; FIXME: \p{Po}: any kind of punctuation character that is not a dash, bracket, quote or connector.
+    ("\\p{Po}" "[^][(){}\"_-]")
     ;; ("{X,Y}" "\\{X,Y\\}") ; need match groups to convert this? or just:
     ("{" "\\{")
     ("}" "\\}")
