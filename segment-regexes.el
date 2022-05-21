@@ -28,200 +28,208 @@
 
 ;;; Code:
 
-;; TODO: add a break yes/no to every item? or do we do that in the struct
-;; TODO: probably best to keep the structure of the separate files, and let the user choose? rather than making a big mess
-;; TODO: okapi_default_icu4j.srx is far more comprehensive than the other okapi files. perhaps it merits its own alist.
+;; TODO: best to keep the structure of the separate files, and let the user choose
+;; TODO: okapi_default_icu4j.srx (more comprehensive than the other okapi)
 
 ;; NB: after-break rules must always be provided
-(defcustom segment-regexes-en-alist
+
+(defvar segment-regexes-en-list
+  ;; TODO: work out correct order, poss make optional
+  (append segment-regexes-omegat-en-list
+          segment-regexes-okapi-en-list
+          segment-regexes-additional-en-list))
+
+(defconst segment-regexes-omegat-en-list
   '(
-    ;; Omega defaultRules.srx:
+    ;; Omega defaultRules.srx (English):
+    
     ("etc\\."
-     "[[:space:]]+[[:lower:]]")
+     "[[:space:]]+[[:lower:]]" :break nil)
     ;; <rule break="no">
     ;; <beforebreak>etc\.</beforebreak>
     ;; <afterbreak>\s+\P{Lu}</afterbreak>
     ;; </rule>
 
     ("Dr\\."
-     "[[:space:]]")
+     "[[:space:]]" :break nil)
     ;; <rule break="no">
     ;; <beforebreak>Dr\.</beforebreak>
     ;; <afterbreak>\s</afterbreak>
     ;; </rule>
 
     ("U\\.K\\."
-     "[[:space:]][[:lower:]]")
+     "[[:space:]][[:lower:]]" :break nil)
     ;; <rule break="no">
     ;; <beforebreak>U\.K\.</beforebreak>
     ;; <afterbreak>\s</afterbreak>
     ;; </rule>
 
     ("M\\."
-     "[[:space:]]")
+     "[[:space:]]" :break nil)
     ;; <rule break="no">
     ;; <beforebreak>M\.</beforebreak>
     ;; <afterbreak>\s</afterbreak>
     ;; </rule>
 
     ("Mr\\."
-     "[[:space:]]")
+     "[[:space:]]" :break nil)
     ;; <rule break="no">
     ;; <beforebreak>Mr\.</beforebreak>
     ;; <afterbreak>\s</afterbreak>
     ;; </rule>
 
     ("Mrs\\."
-     "[[:space:]]")
+     "[[:space:]]" :break nil)
     ;; <rule break="no">
     ;; <beforebreak>Mrs\.</beforebreak>
     ;; <afterbreak>\s</afterbreak>
     ;; </rule>
 
     ("Ms\\."
-     "[[:space:]]")
+     "[[:space:]]" :break nil)
     ;; <rule break="no">
     ;; <beforebreak>Ms\.</beforebreak>
     ;; <afterbreak>\s</afterbreak>
     ;; </rule>
 
     ("Prof\\."
-     "[[:space:]]")
+     "[[:space:]]" :break nil)
     ;; <rule break="no">
     ;; <beforebreak>Prof\.</beforebreak>
     ;; <afterbreak>\s</afterbreak>
     ;; </rule>
 
     ("[Ee]\\.g\\."
-     "[[:space:]]")
+     "[[:space:]]" :break nil)
     ;; <rule break="no">
-    ;; <beforebreak>(?i)e\.g\.</beforebreak>
+    ;; <beforebreak>(?i :break nil)e\.g\.</beforebreak>
     ;; <afterbreak>\s</afterbreak>
     ;; </rule>
 
     ("[Ii]\\.e\\."
-     "[[:space:]]")
+     "[[:space:]]" :break nil)
     ;; <rule break="no">
     ;; <beforebreak>(?i)i\.e\.</beforebreak>
     ;; <afterbreak>\s</afterbreak>
     ;; </rule>
 
     ("resp\\."
-     "[[:space:]]")
+     "[[:space:]]" :break nil)
     ;; <rule break="no">
     ;; <beforebreak>resp\.</beforebreak>
     ;; <afterbreak>\s</afterbreak>
     ;; </rule>
 
     ("stel\\."
-     "[[:space:]]")
+     "[[:space:]]" :break nil)
     ;; <rule break="no">
     ;; <beforebreak>\stel\.</beforebreak>
     ;; <afterbreak>\s</afterbreak>
     ;; </rule>
 
     ("[Ff]ig\\."
-     "[[:space:]]")
+     "[[:space:]]" :break nil)
     ;; <rule break="no">
     ;; <beforebreak>(?i)fig\.</beforebreak>
     ;; <afterbreak>\s</afterbreak>
     ;; </rule>
 
     ("St\\."
-     "[[:space:]]")
+     "[[:space:]]" :break nil)
     ;; <rule break="no">
     ;; <beforebreak>St\.</beforebreak>
     ;; <afterbreak>\s</afterbreak>
     ;; </rule>
 
     ("[[:space:]][A-Z]\\."
-     "[[:space:]]")
+     "[[:space:]]" :break nil)
     ;; <rule break="no">
     ;; <beforebreak>\s[A-Z]\.</beforebreak>
     ;; <afterbreak>\s</afterbreak>
     ;; </rule>
 
     ("[apAP]\\.?[mM]\\."
-     "[[:space:]][a-z]")
+     "[[:space:]][a-z]" :break nil)
     ;; <rule break="no">
     ;; <beforebreak>[apAP]\.?[mM]\.</beforebreak>
     ;; <afterbreak>\s[a-z]</afterbreak>
     ;; </rule>
 
     ("Mt\\."
-     "[[:space:]]")
+     "[[:space:]]" :break nil)
     ;; <rule break="no">
     ;; <beforebreak>Mt\.</beforebreak>
     ;; <afterbreak>\s</afterbreak>
     ;; </rule>
 
     ("No\\."
-     "[[:space:]][[:digit:]]")
+     "[[:space:]][[:digit:]]" :break nil)
     ;; <rule break="no">
     ;; <beforebreak>No\.</beforebreak>
     ;; <afterbreak>\s\d</afterbreak>
     ;; </rule>
 
     ("[Aa]pprox\\."
-     "[[:space:]]")
+     "[[:space:]]" :break nil)
     ;; <rule break="no">
     ;; <beforebreak>[Aa]pprox\.</beforebreak>
     ;; <afterbreak>\s</afterbreak>
     ;; </rule>
 
     ("[[:digit:][:space:]]mi?n\\."
-     "[[:space:]]")
+     "[[:space:]]" :break nil)
     ;; <rule break="no">
     ;; <beforebreak>\d\smi?n\.</beforebreak>
     ;; <afterbreak>\s</afterbreak>
     ;; </rule>
 
     ("[[:digit:][:space:]]sec\\."
-     "[[:space:]]")
+     "[[:space:]]" :break nil)
     ;; <rule break="no">
     ;; <beforebreak>\d\ssec\.</beforebreak>
     ;; <afterbreak>\s</afterbreak>
     ;; </rule>
 
     ("[[:space:]][Vv][sS]?\\."
-     "[[:space:]]")
+     "[[:space:]]" :break nil)
     ;; <rule break="no">
     ;; <beforebreak>\s[vV][sS]?\.</beforebreak>
     ;; <afterbreak>\s</afterbreak>
     ;; </rule>
     ;; </languagerule>
+    ))
 
+(defconst segment-regexes-okapi-en-list
+  '(
 ;;; Okapi defaultSegmentation.srx
     ;; default lang
-
+    
     ("\\b\\(pp?\\|\"e\\.?[[:space:]]*g\\|i\\.?[[:space:]]*e\\|no\\|[Vv]ol\\|[Rr]col\\|maj\\|Lt\\|[Ff]ig\\|[Ff]igs\\|[Vv]iz\\|[Vv]ols\\|[Aa]pprox\\|[Ii]ncl\\|Pres\\|Prof\\|[Dd]ept\\|min\\|max\\|[Gg]ovt\\|c\\.?[[:space:]]*f\\|[Vv]\\.?[[space:]]\\)\\."
-     "[[:space:]]+[^[:upper:]]")
+     "[[:space:]]+[^[:upper:]]" :break nil)
     ;; <rule break="no">
     ;; <beforebreak>\b(pp|e\.?\s*g|i\.?\s*e|no|[Vv]ol|[Rr]col|maj|Lt|[Ff]ig|[Ff]igs|[Vv]iz|[Vv]ols|[Aa]pprox|[Ii]ncl|Pres|Prof|[Dd]ept|min|max|[Gg]ovt|c\.?\s*f|vs)\.</beforebreak>
     ;; <afterbreak>\s+[^\p{Lu}]</afterbreak>
 
     ;; months followed by a digit
     ("\\([Jj]an\\|[Ff]eb\\|[Mm]ar\\|[Aa]pr\\|[Jj]un\\|[Jj]ul\\|[Aa]ug\\|[Ss]ep\\|[Oo]ct\\|[Nn]ov\\|[Dd]ec\\|[Ee]st\\|[Tt]el\\|[Pp]h\\)\\."
-     "[[:space:]+[:digit:]]")
+     "[[:space:]+[:digit:]]" :break nil)
     ;; <rule break="no">
     ;; <beforebreak>((?i)jan|feb|mar|apr|jun|jul|aug|sep|oct|nov|dec|est|tel)\.</beforebreak>
     ;; <afterbreak>\s+\d</afterbreak>
     ;; </rule>
 
-
     ;; titles, followed by uppercase
     ("\\b\\(St\\|Gen\\|Hon\\|Dr\\|Mr\\|Ms\\|Mrs\\|Col\\|Maj\\|Brig\\|Sgt\\|Capt\\|Cmnd\\|Sen\\|Rev\\|Rep\\|Revd\\)\\."
-     "[[:space:]][[:upper:]]")
+     "[[:space:]][[:upper:]]" :break nil)
     ;; <rule break="no">
     ;; <beforebreak>\b(St|Gen|Hon|Dr|Mr|Ms|Mrs|Col|Maj|Brig|Sgt|Capt|Cmnd|Sen|Rev|Rep|Revd)\.</beforebreak>
     ;; <afterbreak>\s+\p{Lu}</afterbreak>
 
-
 ;;; Okapi alternate-default.srx
-    ;; en only
+    ;; English only
 
     ;; basics, done above i think:
-    
+
     ;; <languagerule languagerulename="English">
     ;; <rule break="no">
     ;; <beforebreak>\b[nN]o\.\s</beforebreak>
@@ -253,7 +261,7 @@
     ;; <afterbreak>[^p{Lu}]</afterbreak>
     ;; </rule>
 
-    ;; months (done above)
+    ;; months (done in omegat above)
 
     ;; <rule break="no">
     ;; <beforebreak>\bJan\.\s</beforebreak>
@@ -300,7 +308,8 @@
     ;; <afterbreak></afterbreak>
     ;; </rule>
 
-
+    ("[[:blank:]]Ph\\.?D\\.[[:blank:]]"
+     "" :break nil)
     ;; <rule break="no">
     ;; <beforebreak>\bPh\.?D\.\s</beforebreak>
     ;; <afterbreak></afterbreak>
@@ -308,13 +317,13 @@
     ;; <rule break="no">
 
     ;; et al.
-    ("\\bet\\b[[:space:]]al\\.[[:space:]]" "")
+    ("\\bet\\b[[:space:]]al\\.[[:space:]]" "" :break nil)
     ;; <beforebreak>\bet\b\s\bal\.\s</beforebreak>
     ;; <afterbreak></afterbreak>
     ;; </rule>
 
     ;; titles (done above but are there any diff ones)
-    
+
     ;; <rule break="no">
     ;; <beforebreak>\b(St|Gen|Hon|Prof|Dr|Mr|Ms|Mrs|[JS]r|Col|Maj|Brig|Sgt|Capt|Cmnd|Sen|Rev|Rep|Revd)\.\s</beforebreak>
     ;; <afterbreak></afterbreak>
@@ -331,30 +340,30 @@
     ;; </rule>
     ;; <rule break="no">
 
-    ("\\bInc\\.[[:space:]]" "")
+    ("\\bInc\\.[[:space:]]" "" :break nil)
     ;; <beforebreak>\bInc\.\s</beforebreak>
     ;; <afterbreak></afterbreak>
     ;; </rule>
 
-    ("\\bCorp\\.[[:space:]]" "")
+    ("\\bCorp\\.[[:space:]]" "" :break nil)
     ;; <rule break="no">
     ;; <beforebreak>\bCorp\.\s</beforebreak>
     ;; <afterbreak></afterbreak>
     ;; </rule>
 
-    ("\\bBros\\.[[:space:]]" "")
+    ("\\bBros\\.[[:space:]]" "" :break nil)
     ;; <rule break="no">
     ;; <beforebreak>\bBros\.\s</beforebreak>
     ;; <afterbreak></afterbreak>
     ;; </rule>
 
-    ("\\bDist\\.[[:space:]]" "")
+    ("\\bDist\\.[[:space:]]" "" :break nil)
     ;; <rule break="no">
     ;; <beforebreak>\bDist\.\s</beforebreak>
     ;; <afterbreak></afterbreak>
     ;; </rule>
 
-    ("\\bCo\\.[[:space:]]" "")
+    ("\\bCo\\.[[:space:]]" "" :break nil)
     ;; <rule break="no">
     ;; <beforebreak>\bCo\.\s</beforebreak>
     ;; <afterbreak></afterbreak>
@@ -362,7 +371,7 @@
 
     ;; ellipsis, poss surrounded by [] or ():
     ("[[(]*…[])]*"
-     "[[:lower:]]")
+     "[[:lower:]]" :break nil)
     ;; <rule break="no">
     ;; <beforebreak>[\[\(]*…[\]\)]* </beforebreak>
     ;; <afterbreak>\p{Ll}</afterbreak>
@@ -370,28 +379,28 @@
 
     ;; any opening bracket + ! and/or ? + any closing bracket
     ("[[({][!?]+[])}]"
-     "")
+     "" :break nil)
     ;; <rule break="no">
     ;; <beforebreak>\p{Ps}[!?]+\p{Pe} </beforebreak>
     ;; <afterbreak></afterbreak>
     ;; </rule>
-    
+
     ("[\\.!?…]+[])}]"
-     "[[:space:]][[:lower:]]") ; edit: mandate a space first
+     "[[:space:]][[:lower:]]" :break nil) ; edit: mandate a space first
     ;; <rule break="no">
     ;; <beforebreak>[\.!?…]+\p{Pe} </beforebreak>
     ;; <afterbreak>\p{Ll}</afterbreak>
     ;; </rule>
 
     ("\"”'[[:space:]]*"
-     "[[:space:]]*[[:lower:]]")
+     "[[:space:]]*[[:lower:]]" :break nil)
     ;; <rule break="no">
     ;; <beforebreak>[\"”']\s*</beforebreak>
     ;; <afterbreak>\s*\p{Ll}</afterbreak>
     ;; </rule>
 
     ;; what the hell's this shit
-    ("'\"„][\\.!?…]['\"”][[:space:]]")
+    ("'\"„][\\.!?…]['\"”][[:space:]]" :break nil)
     ;; <rule break="no">
     ;; <beforebreak>['"„][\.!?…]['"”]\s</beforebreak>
     ;; <afterbreak></afterbreak>
@@ -399,7 +408,7 @@
 
     ;; if character + period followed by character + SPC + period
     ("\\b[[:alpha:]]\\.[[:space:]]"
-     "[[:alpha:]]\\.[[:space:]]")
+     "[[:alpha:]]\\.[[:space:]]" :break nil)
     ;; <rule break="no">
     ;; <beforebreak>\b\p{L}\.\s</beforebreak>
     ;; <afterbreak>\p{L}\.\s</afterbreak>
@@ -407,14 +416,14 @@
 
     ;; if character + period followed by character + period
     ("\\b[[:alpha:]]\\."
-     "[[:alpha:]]\\.")
+     "[[:alpha:]]\\." :break nil)
     ;; <rule break="no">
     ;; <beforebreak>\b\p{L}\.</beforebreak>
     ;; <afterbreak>\p{L}\.</afterbreak>
     ;; </rule>
 
     ("[\\.[[:space:]]][[:alpha:]]\\{1,2\\}\\.[[:space:]]"
-     "[[:digit:][:lower:]]")
+     "[[:digit:][:lower:]]" :break nil)
     ;; <rule break="no">
     ;; <beforebreak>[\.\s]\p{L}{1,2}\.\s</beforebreak>
     ;; <afterbreak>[\p{N}\p{Ll}]</afterbreak>
@@ -422,21 +431,21 @@
 
     ;; three stops as ellipsis, poss surrounded in [] or ()
     ("[[(]*\\.\\.\\.[])]*"
-     "[[:lower:]]")
+     "[[:lower:]]" :break nil)
     ;; <rule break="no">
     ;; <beforebreak>[\[\(]*\.\.\.[\]\)]* </beforebreak>
     ;; <afterbreak>[^\p{Lu}]</afterbreak>
     ;; </rule>
 
     ("\\b[[:lower:]]\\.[[:space:]][[:lower:]]\\.[[:space:]]"
-     "")
+     "" :break nil)
     ;; <rule break="no">
     ;; <beforebreak>\b\p{Lu}\.\s\p{Lu}\.\s</beforebreak>
     ;; <afterbreak></afterbreak>
     ;; </rule>
 
     ("\\b[[:lower:]]\\.[[:lower:]]\\.[[:space:]]"
-     "")
+     "" :break nil)
     ;; <rule break="no">
     ;; <beforebreak>\b\p{Lu}\.\p{Lu}\.\s</beforebreak>
     ;; <afterbreak></afterbreak>
@@ -445,14 +454,14 @@
     ;; Name initials (capital not preceded by period):
 
     ("[^\\.][[:space:]][A-Z]\\.[[:space:]]"
-     "")
+     "" :break nil)
     ;; <rule break="no">
     ;; <beforebreak>[^\.]\s[A-Z]\.\s</beforebreak>
     ;; <afterbreak></afterbreak>
     ;; </rule>
 
-    ;; TODO: YES breaks:
-    
+    ;; TODO: YES breaks Okapi:
+
     ;; <rule break="yes">
     ;; <beforebreak>[\.!?…][\u00BB\u2019\u201D\u203A"'\p{Pe}\u0002]*\s</beforebreak>
     ;; <afterbreak></afterbreak>
@@ -467,35 +476,34 @@
     ;; <afterbreak>\p{Lu}\p{Ll}</afterbreak>
     ;; </rule>
     ;; </languagerule>
+    ))
 
-    ;; segment.el additions
-
+(defcustom segment-regexes-additional-en-list
+  '(
+    ;;; segment.el additions
 
     ;; Sr. / Jr. can end a sentence
     ;; a single title addition from okapi above (otherwise we are using omegat)
     ("[JS]r\\."
-     "[[:space:]][[:lower:]]")
-    
+     "[[:space:]][[:lower:]]" :break nil)
+
     ;; this is wrong, but how to differentiate U.S. ending a sentence, and
     ;; U.S. followed by a proper noun?
     ;; omegat's U.K. rule above only mandates a space, which is also imperfect
     ("U\\.S\\."
-     "[[:space:]][[:lower:]]")
-    
+     "[[:space:]][[:lower:]]" :break nil)
+
     ;; chars + period + closing bracket followed by space + lower char
     ("[[:lower:]]+\\.[])}]"
-     "[[:space:]][[:lower:]]")
+     "[[:space:]][[:lower:]]" :break nil)
 
     ;; opus abbrev:
     ("[Oo]p\\."
-     "[[:space:]][[:digit:]]")
-
-    )
-  "Regexes of before break / after break rules.
+     "[[:space:]][[:digit:]]" :break nil))
+  "Additional regexes of before break / after break rules.
 Used for ending or not ending sentences."
-  :group 'segment
-  :type 'alist)
-
+  :group 'segment-regexes
+  :type 'plist)
 
 (provide 'segment-regexes)
 ;;; segment-regexes.el ends here
