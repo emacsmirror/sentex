@@ -33,11 +33,16 @@
 
 ;; NB: after-break rules must always be provided
 
-(defvar segment-regexes-en-list
-  ;; TODO: work out correct order, poss make optional
-  (append segment-regexes-omegat-en-list
-          segment-regexes-okapi-en-list
-          segment-regexes-additional-en-list))
+(defvar segment-regexes-en-list nil)
+
+(defun segment-regexes-construct-en-list ()
+  "Return the full collection of regex rules for English."
+  (setq segment-regexes-en-list
+        ;; TODO: work out correct order, poss make optional
+        (append
+         segment-regexes-additional-en-list
+         segment-regexes-omegat-en-list
+         segment-regexes-okapi-en-list)))
 
 (defconst segment-regexes-omegat-en-list
   '(

@@ -44,25 +44,27 @@
 ;;;###autoload
 (defun segment-forward-sentence ()
   "Call `forward-sentence' one or more times.
-Check if we are after any entries in `segment-regexes-en-alist',
+Check if we are after any entries in `segment-regexes-en-list',
 and if we are, run `forward-sentence' again and check again."
   (interactive)
   (forward-sentence)
   (while
-      (segment--looking-back-forward-map segment-regexes-en-alist)
+      (segment--looking-back-forward-map
+       (segment-regexes-construct-en-list))
     (forward-sentence)))
 
 ;;;###autoload
 (defun segment-backward-sentence ()
   "Call `backward-sentence' one or more times.
-Check if we are after any entries in `segment-regexes-en-alist',
+Check if we are after any entries in `segment-regexes-en-list',
 and if we are, run `backward-sentence' again and check again."
   (interactive)
   (backward-sentence)
   (while
-      (segment--looking-back-forward-map segment-regexes-en-alist
-                                         :moving-backward)
-    (backward-sentence)))
+      (segment--looking-back-forward-map
+       (segment-regexes-construct-en-list)
+       :moving-backward)
+  (backward-sentence))
 
 (defun segment--looking-back-forward-map (regex-alist &optional moving-backward)
   "Return non-nil if we are at any of the segment rules in REGEX-ALIST.
@@ -110,42 +112,42 @@ Add `segment.el' rules to `sentence-nav-abbreviation-list' beforehand."
   (interactive "p")
   (let ((sentence-nav-abbreviation-list
          (append (segment--get-before-break-rules-for-sentence-nav
-                  segment-regexes-en-alist)
-                 sentence-nav-abbreviation-list)))
-    (sentence-nav-forward arg)))
+                  (segment-regexes-construct-en-list)
+                  sentence-nav-abbreviation-list)))
+        (sentence-nav-forward arg)))
 
 ;;;###autoload
-(defun segment-sentence-nav-backward (&optional arg)
-  "Move to the start of the previous sentence ARG times.
+  (defun segment-sentence-nav-backward (&optional arg)
+    "Move to the start of the previous sentence ARG times.
 Add `segment.el' rules to `sentence-nav-abbreviation-list' beforehand."
-  (interactive "p")
-  (let ((sentence-nav-abbreviation-list
-         (append (segment--get-before-break-rules-for-sentence-nav
-                  segment-regexes-en-alist)
-                 sentence-nav-abbreviation-list)))
-    (sentence-nav-backward arg)))
+    (interactive "p")
+    (let ((sentence-nav-abbreviation-list
+           (append (segment--get-before-break-rules-for-sentence-nav
+                    (segment-regexes-construct-en-list))
+                   sentence-nav-abbreviation-list)))
+      (sentence-nav-backward arg)))
 
 ;;;###autoload
-(defun segment-sentence-nav-forward-end (&optional arg)
-  "Move to the end of the next sentence end ARG times.
+  (defun segment-sentence-nav-forward-end (&optional arg)
+    "Move to the end of the next sentence end ARG times.
 Add `segment.el' rules to `sentence-nav-abbreviation-list' beforehand."
-  (interactive "p")
-  (let ((sentence-nav-abbreviation-list
-         (append (segment--get-before-break-rules-for-sentence-nav
-                  segment-regexes-en-alist)
-                 sentence-nav-abbreviation-list)))
-    (sentence-nav-forward-end arg)))
+    (interactive "p")
+    (let ((sentence-nav-abbreviation-list
+           (append (segment--get-before-break-rules-for-sentence-nav
+                    (segment-regexes-construct-en-list))
+                   sentence-nav-abbreviation-list)))
+      (sentence-nav-forward-end arg)))
 
 ;;;###autoload
-(defun sentence-nav-backward-end (&optional arg)
-  "Move to the end of the previous sentence end ARG times.
+  (defun sentence-nav-backward-end (&optional arg)
+    "Move to the end of the previous sentence end ARG times.
 Add `segment.el' rules to `sentence-nav-abbreviation-list' beforehand."
-  (interactive "p")
-  (let ((sentence-nav-abbreviation-list
-         (append (segment--get-before-break-rules-for-sentence-nav
-                  segment-regexes-en-alist)
-                 sentence-nav-abbreviation-list)))
-    (sentence-nav-backward-end arg)))
+    (interactive "p")
+    (let ((sentence-nav-abbreviation-list
+           (append (segment--get-before-break-rules-for-sentence-nav
+                    (segment-regexes-construct-en-list))  
+                   sentence-nav-abbreviation-list)))
+      (sentence-nav-backward-end arg)))
 
 (provide 'segment)
 ;;; segment.el ends here
