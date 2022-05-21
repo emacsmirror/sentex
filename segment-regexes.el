@@ -29,11 +29,13 @@
 ;;; Code:
 
 ;; TODO: add a break yes/no to every item? or do we do that in the struct
+;; TODO: probably best to keep the structure of the separate files, and let the user choose? rather than making a big mess
+;; TODO: okapi_default_icu4j.srx is far more comprehensive than the other okapi files. perhaps it merits its own alist.
 
 ;; NB: after-break rules must always be provided
 (defcustom segment-regexes-en-alist
   '(
-    
+    ;; Omega defaultRules.srx:
     ("etc\\."
      "[[:space:]]+[[:lower:]]")
     ;; <rule break="no">
@@ -54,9 +56,6 @@
     ;; <beforebreak>U\.K\.</beforebreak>
     ;; <afterbreak>\s</afterbreak>
     ;; </rule>
-
-    ("U\\.S\\."
-     "[[:space:]][[:lower:]]")
 
     ("M\\."
      "[[:space:]]")
@@ -92,10 +91,6 @@
     ;; <beforebreak>Prof\.</beforebreak>
     ;; <afterbreak>\s</afterbreak>
     ;; </rule>
-
-    ("[JS]r\\."
-     "[[:space:]][[:lower:]]")
-    ;; Sr. / Jr. can end a sentence, so the rule this is from below is wrong
 
     ("[Ee]\\.g\\."
      "[[:space:]]")
@@ -222,7 +217,7 @@
     ;; <afterbreak>\s+\p{Lu}</afterbreak>
 
 
-;;; Okapi alt segmentation
+;;; Okapi alternate-default.srx
     ;; en only
 
     ;; basics, done above i think:
@@ -475,6 +470,18 @@
 
     ;; segment.el additions
 
+
+    ;; Sr. / Jr. can end a sentence
+    ;; a single title addition from okapi above (otherwise we are using omegat)
+    ("[JS]r\\."
+     "[[:space:]][[:lower:]]")
+    
+    ;; this is wrong, but how to differentiate U.S. ending a sentence, and
+    ;; U.S. followed by a proper noun?
+    ;; omegat's U.K. rule above only mandates a space, which is also imperfect
+    ("U\\.S\\."
+     "[[:space:]][[:lower:]]")
+    
     ;; chars + period + closing bracket followed by space + lower char
     ("[[:lower:]]+\\.[])}]"
      "[[:space:]][[:lower:]]")
