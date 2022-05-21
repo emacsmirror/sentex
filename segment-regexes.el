@@ -452,7 +452,7 @@
     ;; </rule>
 
     ;; Name initials (capital not preceded by period):
-
+    ;; FIXME: such initials could also be preceded by opening quotation marks.
     ("[^\\.][[:space:]][A-Z]\\.[[:space:]]"
      "" :break nil)
     ;; <rule break="no">
@@ -496,6 +496,12 @@
     ;; chars + period + closing bracket followed by space + lower char
     ("[[:lower:]]+\\.[])}]"
      "[[:space:]][[:lower:]]" :break nil)
+
+    ;; Name initials can be preceded by opening quotation mark
+    ;; and space should be an after break
+    ;; fix for okapi regex above
+    ("[^\\.][[:space:]][\"“]?[A-Z]\\."
+     "[[:space:]]" :break nil)
 
     ;; opus abbrev:
     ("[Oo]p\\."
