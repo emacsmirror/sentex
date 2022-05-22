@@ -454,7 +454,6 @@
     ;; </rule>
 
     ;; Name initials (capital not preceded by period):
-    ;; FIXME: such initials could also be preceded by opening quotation marks.
     ("[^\\.][[:space:]][A-Z]\\.[[:space:]]"
      "" :break nil)
     ;; <rule break="no">
@@ -462,7 +461,7 @@
     ;; <afterbreak></afterbreak>
     ;; </rule>
 
-    ;; TODO: YES breaks Okapi:
+    ;; TODO: YES breaks from Okapi:
 
     ;; <rule break="yes">
     ;; <beforebreak>[\.!?…][\u00BB\u2019\u201D\u203A"'\p{Pe}\u0002]*\s</beforebreak>
