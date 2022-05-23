@@ -73,14 +73,14 @@ and if we are, run `backward-sentence' again and check again."
   "Return non-nil if we are at any of the segment rules in REGEX-ALIST.
 MOVING-BACKWARD modifies the check for when we have moved backwards."
   (let ((case-fold-search nil))
-    (cl-dolist (x regex-alist)
+    (cl-dolist (reg-pair regex-alist)
       (when (and (looking-back
                   ;; before-break regex
                   (if moving-backward
                       ;; we are after any whitespace
-                      (concat (car x)
+                      (concat (car reg-pair)
                               "[[:blank:]]*")
-                    (car x))
+                    (car reg-pair))
                   ;; limit arg:
                   (save-excursion (backward-word 2)
                                   (point)))
@@ -89,10 +89,9 @@ MOVING-BACKWARD modifies the check for when we have moved backwards."
                      ;; we are after any whitespace:
                      (save-excursion
                        (forward-whitespace -1) ; back over whitespace
-                       (looking-at (cadr x)))
-                   (looking-at (cadr x))))
-        (cl-return x)))))
-
+                       (looking-at (cadr reg-pair)))
+                   (looking-at (cadr reg-pair))))
+        (cl-return reg-pair)))))
 
 ;; modify sentence-nav functions:
 (defun segment--get-before-break-rules-for-sentence-nav (regex-list)
