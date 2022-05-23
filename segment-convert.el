@@ -29,7 +29,6 @@
 
 (require 'dom)
 (require 'xml)
-(require 'segment)
 
 ;; conversion from ICU to emacs regex:
 (defvar segment-convert-icu-regex-conversion-alist
