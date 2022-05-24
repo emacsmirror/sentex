@@ -12,10 +12,12 @@ Some functions are also included which add the before-break rules to [[https://g
 
 * converting the whole ruleset
 
-I'm also hoping to programmatically convert the rulesets for all languages that have one. Converting regular expression syntax using regular expressions is a headfuck though. Work so far is in =segment-convert.el=.
+I'm also hoping to programmatically convert the rulesets for all languages that have one. Converting regular expression syntax using regular expressions is a headfuck though. Work so far is in =segment-convert.el=. Any help would be appreciated.
 
 * features
 
-- doesn't tell you to shut up and use two spaces for periods (what if you're not the one typing the spaces after any of the periods, and you have a whole book of periods? are you doing to tell me to use a regex to replace all the single space periods with double spaces...?)
+- sophisticated non-break and break rules for common abbreviations and other situations where a dot doesn't end a sentence.
+- add you own custom rules.
+- doesn't tell you to shut up and use two spaces for periods, as if that were a solution (what if you're not the one typing the spaces after the periods, and you have a whole book of periods? are you going to tell me to use a regex to replace all the single space periods with double spaces...?)
 - doesn't assume sentences begin with a capital letter.
 - should work with filled text.
