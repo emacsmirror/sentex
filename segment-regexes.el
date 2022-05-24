@@ -32,8 +32,10 @@
 
 ;;; Code:
 
-;; TODO: best to keep the structure of the separate files, and let the user choose
-;; TODO: okapi_default_icu4j.srx (more comprehensive than the other okapi)
+;; TODO: best to keep the structure of the separate files, and let the user
+;; choose which rules to use
+
+;; TODO: okapi_default_icu4j.srx (looks more comprehensive than the other okapi)
 
 ;; NB: after-break rules must always be provided
 
@@ -512,6 +514,7 @@ Used for ending or not ending sentences."
   :group 'segment-regexes
   :type 'plist)
 
+;; TODO make construct-list language-generic
 (defun segment-regexes--construct-en-list ()
   "Return the full collection of regex rules for English."
   (setq segment-regexes-en-list
