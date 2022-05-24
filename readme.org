@@ -10,7 +10,7 @@ As this is new code, it hasn't been tested much at all. In particular, I don't y
 
 Some functions are also included which add the before-break rules to [[https://github.com/noctuid/emacs-sentence-navigation][emacs-sentence-navigation]]'s abbreviation list and then call on of its sentence movement functions. As I don't know that code very well, I'm not yet sure how to implement the after-break rules.
 
-* converting the whole ruleset
+* converting all rulesets
 
 I'm also hoping to programmatically convert the rulesets for all languages that have one. Converting regular expression syntax using regular expressions is a headfuck though. Work so far is in =segment-convert.el=. Any help would be appreciated.
 
