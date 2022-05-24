@@ -58,9 +58,7 @@
     ("{" "\\{")
     ("}" "\\}")
     )
-  "An (in-progress) alist of ICU regexe elements and their elisp equivalents.")
-
-;; (defvar segment-convert-icu-regex-list nil)
+  "An (in-progress) alist of ICU regex elements and their elisp equivalents.")
 
 (cl-defstruct (segment-convert-ruleset (:constructor segment-convert-ruleset-create))
   language-rule-name rules)
@@ -111,7 +109,8 @@ Conversion is done against `segment-convert-icu-regex-conversion-alist'."
           (segment-convert--get-rulesets-from-file srx-file)))
 
 (defun segment-convert--convert-icu-ruleset-to-elisp (ruleset)
-  "Convert a single language RULESET to elisp regexes."
+  "Convert a single language RULESET to elisp regexes.
+Updates the structs with the converted regex strings."
   (let ((rules (segment-convert-ruleset-rules ruleset)))
     (mapc (lambda (x)
             (setf (segment-convert-rule-before-break x)
