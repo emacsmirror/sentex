@@ -30,6 +30,11 @@
 (require 'dom)
 (require 'xml)
 
+;; instead of structs, just build a keyword plist like:
+;; '(:break nil :before-break x :after-break y)
+
+;; ICU regexes support look-aheads, Elisp doesn't:
+;; look out for (?= ...), (?! ...), (?<= ...), (?<! ...)
 ;; conversion from ICU to emacs regex:
 (defvar segment-convert-icu-regex-conversion-alist
   '(
