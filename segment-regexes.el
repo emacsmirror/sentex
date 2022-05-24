@@ -518,12 +518,16 @@ Used for ending or not ending sentences."
 (defun segment-regexes--construct-en-list ()
   "Return the full collection of regex rules for English."
   (setq segment-regexes-en-list
-        ;; TODO: work out correct order, poss make optional
+        ;; TODO: work out correct order
         (append
          segment-regexes-additional-en-list
-         segment-regexes-omegat-en-list
-         segment-regexes-okapi-en-list)))
-
+         (cond ((eq segment-ruleset-framework 'omegat)
+                segment-regexes-omegat-en-list)
+               ((eq segment-ruleset-framework 'okapi)
+                segment-regexes-okapi-en-list)
+               ((eq segment-ruleset-framework 'all)
+                segment-regexes-omegat-en-list
+                segment-regexes-okapi-en-list)))))
 
 ;;; omegat French rules:
 
