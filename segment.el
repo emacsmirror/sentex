@@ -44,7 +44,8 @@
 
 (defcustom segment-ruleset-framework 'omegat
   "Framework to use for break/non-break rules.
-Can be either 'omegat, 'okapi, 'okapi-icu4j, or 'all."
+Can be either 'omegat, 'okapi, 'okapi-icu4j, or 'all.
+Used by `segment-regexes--construct-en-list'."
   :type 'symbol
   :group 'segment)
 
