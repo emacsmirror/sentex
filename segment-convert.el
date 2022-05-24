@@ -47,7 +47,8 @@
     ("\\P{Ll}" "[^[:lower:]]")
     ("\\P{Lu}" "[^[:upper:]]")
     ;; ("\\P{Lu}" "[[:lower:]]") ; wrong
-    ;; (?i) == (case-fold-search t) ; FIXME how to do case fold search
+    ;; ("(?i)" "") ; (case-fold-search t) ; elisp regexes ignore case by default
+    ("\\(?i\\)" "") ; (case-fold-search t) ; elisp regexes ignore case by default
     ("\\p{Ps}" "[[({]") ; any opening bracket
     ("\\p{pe}" "[])}]") ; any closing bracket
     ("\\p{L}" "[[:alpha:]]") ; any letter in any language
