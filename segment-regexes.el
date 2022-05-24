@@ -536,21 +536,21 @@ Used for ending or not ending sentences."
     ;; <languagerule languagerulename="French">
 
     ("pp\\."
-     "[[:blank:]]" :break nil)
+     "[[:space:]]" :break nil)
     ;; <rule break="no">
     ;; <beforebreak>pp\.</beforebreak>
     ;; <afterbreak>\s</afterbreak>
     ;; </rule>
 
     ("[^a-z]p\\."
-     "[[:blank:]]" :break nil)
+     "[[:space:]]" :break nil)
     ;; <rule break="no">
     ;; <beforebreak>[^a-z]p\.</beforebreak>
     ;; <afterbreak>\s</afterbreak>
     ;; </rule>
 
     ("\\([A-Z]\\.\\)\\{2\\}"
-     "[[:blank:]]" :break nil)
+     "[[:space:]]" :break nil)
     ;; <rule break="no">
     ;; <beforebreak>([A-Z]\.){2,}</beforebreak>
     ;; <afterbreak>\s</afterbreak>
@@ -558,14 +558,14 @@ Used for ending or not ending sentences."
 
     ;; not too sure about this?
     ("^M\\."
-     "[[:blank:]]" :break nil)
+     "[[:space:]]" :break nil)
     ;; <rule break="no">
     ;; <beforebreak>^M\.</beforebreak>
     ;; <afterbreak>\s</afterbreak>
     ;; </rule>
 
     ("MM\\."
-     "[[:blank:]]" :break nil)
+     "[[:space:]]" :break nil)
     ;; <rule break="no">
     ;; <beforebreak>MM\.</beforebreak>
     ;; <afterbreak>\s</afterbreak>
@@ -573,63 +573,63 @@ Used for ending or not ending sentences."
 
     ;; also not too sure about this?
     ("[^A-Z]M\\."
-     "[[:blank:]]" :break nil)
+     "[[:space:]]" :break nil)
     ;; <rule break="no">
     ;; <beforebreak>[^A-Z]M\.</beforebreak>
     ;; ;; <afterbreak>\s</afterbreak>
     ;; ;; </rule>
 
     ("etc\\."
-     "[[:blank:]][a-z]" :break nil)
+     "[[:space:]][a-z]" :break nil)
     ;; ;; <rule break="no">
     ;; ;; <beforebreak>etc\.</beforebreak>
     ;; ;; <afterbreak>\s[a-z]</afterbreak>
     ;; ;; </rule>
 
     ("Mr\\."
-     "[[:blank:]]" :break nil)
+     "[[:space:]]" :break nil)
     ;; <rule break="no">
     ;; <beforebreak>Mr\.</beforebreak>
     ;; <afterbreak>\s</afterbreak>
     ;; </rule>
 
     ("Mme\\."
-     "[[:blank:]]" :break nil)
+     "[[:space:]]" :break nil)
     ;; <rule break="no">
     ;; <beforebreak>Mme\.</beforebreak>
     ;; <afterbreak>\s</afterbreak>
     ;; </rule>
 
     ("Dr\\."
-     "[[:blank:]]" :break nil)
+     "[[:space:]]" :break nil)
     ;; <rule break="no">
     ;; <beforebreak>Dr\.</beforebreak>
     ;; <afterbreak>\s</afterbreak>
     ;; </rule>
 
     ("Mlle\\."
-     "[[:blank:]]" :break nil)
+     "[[:space:]]" :break nil)
     ;; <rule break="no">
     ;; <beforebreak>Mlle\.</beforebreak>
     ;; <afterbreak>\s</afterbreak>
     ;; </rule>
 
     ("Prof\\."
-     "[[:blank:]]" :break nil)
+     "[[:space:]]" :break nil)
     ;; <rule break="no">
     ;; <beforebreak>Prof\.</beforebreak>
     ;; <afterbreak>\s</afterbreak>
     ;; </rule>
 
     ("Resp\\."
-     "[[:blank:]]" :break nil)
+     "[[:space:]]" :break nil)
     ;; <rule break="no">
     ;; <beforebreak>Resp\.</beforebreak>
     ;; <afterbreak>\s</afterbreak>
     ;; </rule>
 
     ("[rR]éf\\."
-     "[[:blank:]]" :break nil)
+     "[[:space:]]" :break nil)
     ;; <rule break="no">
     ;; <beforebreak>Réf\.</beforebreak>
     ;; <afterbreak>\s</afterbreak>
@@ -639,8 +639,8 @@ Used for ending or not ending sentences."
     ;; <afterbreak>\s</afterbreak>
     ;; </rule>
 
-    ("[C\\.[[:blank:]]?A\\."
-     "[[:blank:]]" :break nil)
+    ("[C\\.[[:space:]]?A\\."
+     "[[:space:]]" :break nil)
     ;; <rule break="no">
     ;; <beforebreak>C\.A\.</beforebreak>
     ;; <afterbreak>\s</afterbreak>
@@ -650,15 +650,15 @@ Used for ending or not ending sentences."
     ;; <afterbreak>\s</afterbreak>
     ;; </rule>
 
-    ("[[:blank:]][A-Z]\\."
-     "[[:blank:]]" :break nil)
+    ("[[:space:]][A-Z]\\."
+     "[[:space:]]" :break nil)
     ;; <rule break="no">
     ;; <beforebreak>\s[A-Z]\.</beforebreak>
     ;; <afterbreak>\s</afterbreak>
     ;; </rule>
 
     ("[cC]f\\."
-     "[[:blank:]]" :break nil)
+     "[[:space:]]" :break nil)
     ;; <rule break="no">
     ;; <beforebreak>Cf\.</beforebreak>
     ;; <afterbreak>\s</afterbreak>
@@ -669,7 +669,7 @@ Used for ending or not ending sentences."
     ;; </rule>
 
     ("[Aa]rt\\."
-     "[[:blank:]]" :break nil)
+     "[[:space:]]" :break nil)
     ;; <rule break="no">
     ;; <beforebreak>(A|a)rt\.</beforebreak>
     ;; <afterbreak>\s</afterbreak>
@@ -685,28 +685,28 @@ Used for ending or not ending sentences."
     ;; FIXME: 'vol' can end a sentence!: J'ai raté mon vol.
     ;; maybe the after-break should be roman numeral or digit
     ("[Vv]ol\\."
-     "[[:blank:]]" :break nil)
+     "[[:space:]]" :break nil)
     ;; <rule break="no">
     ;; <beforebreak>[Vv]ol\.</beforebreak>
     ;; <afterbreak>\s</afterbreak>
     ;; </rule>
 
     ("i\\.e\\."
-     "[[:blank:]]" :break nil)
+     "[[:space:]]" :break nil)
     ;; <rule break="no">
     ;; <beforebreak>i\.e\.</beforebreak>
     ;; <afterbreak>\s</afterbreak>
     ;; </rule>
 
     ("St\\."
-     "[[:blank:]]" :break nil)
+     "[[:space:]]" :break nil)
     ;; <rule break="no">
     ;; <beforebreak>St\.</beforebreak>
     ;; <afterbreak>\s</afterbreak>
     ;; </rule>
 
     ("\\."
-     "[[:blank:]][a-z]" :break nil)
+     "[[:space:]][a-z]" :break nil)
     ;; <rule break="no">
     ;; <beforebreak>\.</beforebreak>
     ;; <afterbreak>\s[a-z]</afterbreak>
@@ -714,14 +714,14 @@ Used for ending or not ending sentences."
 
     ;; non-breaking space \u00A0 or space and closing quotation marks:
     ("\\."
-     "[\u00A0[:blank:]]»" :break nil)
+     "[\u00A0[:space:]]»" :break nil)
     ;; <rule break="no">
     ;; <beforebreak>\.</beforebreak>
     ;; <afterbreak>[\u00A0\s]»</afterbreak>
     ;; </rule>
 
     ("[.?!][\u00A0[:blank]]»"
-     "[[:blank:]]" :break nil)
+     "[[:space:]]" :break nil)
     ;; <rule break="no">
     ;; <beforebreak>[\.\?\!][\u00A0\s]»</beforebreak>
     ;; <afterbreak>\s</afterbreak>
