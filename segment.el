@@ -42,6 +42,12 @@
   "Sentence segmentation regexes."
   :group 'editing)
 
+(defcustom segment-ruleset-framework 'omegat
+  "Framework to use for break/non-break rules.
+Can be either 'omegat, 'okapi, 'okapi-icu4j, or 'all."
+  :type 'symbol
+  :group 'segment)
+
 ;; roll our own movement cmds:
 
 ;;;###autoload
