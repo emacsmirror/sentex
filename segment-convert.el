@@ -100,6 +100,14 @@
              :after-break (dom-text (dom-by-tag x 'afterbreak))))
           (dom-by-tag dom 'rule)))
 
+(defun segment-convert--get-ruleset-languages (srx-file)
+  "Return a list of the languages of the rulesets in SRX-FILE."
+  (let ((segment-omegat-rulesets
+         (segment-convert--get-rulesets-from-file srx-file)))
+    (mapcar (lambda (ruleset)
+              (segment-convert-ruleset-language-rule-name ruleset))
+            segment-omegat-rulesets)))
+
 ;;; converting the regexes in our structs from ICU to elisp
 (defun segment-convert--convert-srx-file-to-elisp (srx-file)
   "Convert SRX-FILE of segmentation rules to elisp regexes.
