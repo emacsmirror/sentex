@@ -150,6 +150,34 @@ By default, it is a before rule, with arg AFTER, it's an after one."
               segment-convert-icu-regex-conversion-alist)
         (buffer-string)))))
 
+;; try to use `pcre2el' to convert (fails):
+;;; converting the regexes in our structs from ICU to elisp
+(defun segment-convert--convert-srx-file-to-elisp-pcre2el (srx-file)
+  "Convert SRX-FILE of segmentation rules to elisp regexes."
+  (mapcar (lambda (x)
+            (segment-convert--convert-icu-ruleset-to-elisp-pcre2el x))
+          (segment-convert--get-rulesets-from-file srx-file)))
+
+(defun segment-convert--convert-icu-ruleset-to-elisp-pcre2el (ruleset)
+  "Convert a single language RULESET to elisp regexes.
+Updates the structs with the converted regex strings."
+  (let ((rules (segment-convert-ruleset-rules ruleset)))
+    (mapc (lambda (x)
+            (setf (segment-convert-rule-before-break x)
+                  (segment-convert--convert-icu-rule-pcre2el x))
+            (setf (segment-convert-rule-after-break x)
+                  (segment-convert--convert-icu-rule-pcre2el x :after)))
+          rules)))
+
+(defun segment-convert--convert-icu-rule-pcre2el (rule &optional after)
+  "Convert single segmentation RULE to elisp regex.
+By default, it is a before rule, with arg AFTER, it's an after one."
+  (let ((rule-string (if after
+                         (segment-convert-rule-after-break rule)
+                       (segment-convert-rule-before-break rule))))
+    (unless (equal "" rule-string)
+      (pcre-to-elisp rule-string))))
+
 (defun segment-convert--replace-icu-regex-in-string (regex-pair)
   "Replace a matching CAR from REGEX-PAIR with its CADR."
   (goto-char (point-min))
