@@ -52,34 +52,37 @@ Used by `segment-regexes--construct-en-list'."
 ;; roll our own movement cmds:
 
 ;;;###autoload
-(defun segment-forward-sentence ()
-  "Call `forward-sentence' one or more times.
+(defun segment-forward-sentence (&optional arg)
+  "Call `forward-sentence' ARG number of times.
 Check if we are after any entries in `segment-regexes-en-list',
 and if we are, run `forward-sentence' again and check again."
-  (interactive)
-  (forward-sentence)
-  (while
-      (segment--looking-back-forward-map
-       (segment-regexes--construct-en-list))
-    (forward-sentence)))
+  (interactive "p")
+  (dotimes (count (or arg 1))
+    (forward-sentence)
+    (while
+        (segment--looking-back-forward-map
+         (segment-regexes--construct-en-list))
+      (forward-sentence))))
 
 ;;;###autoload
-(defun segment-backward-sentence ()
-  "Call `backward-sentence' one or more times.
+(defun segment-backward-sentence (&optional arg)
+  "Call `backward-sentence' ARG number of times.
 Check if we are after any entries in `segment-regexes-en-list',
 and if we are, run `backward-sentence' again and check again."
-  (interactive)
-  (backward-sentence)
-  (while
-      (segment--looking-back-forward-map
-       (segment-regexes--construct-en-list)
-       :moving-backward)
-    (backward-sentence)))
+  (interactive "p")
+  (dotimes (count (or arg 1))
+    (backward-sentence)
+    (while
+        (segment--looking-back-forward-map
+         (segment-regexes--construct-en-list)
+         :moving-backward)
+      (backward-sentence))))
 
-(defun segment-kill-sentence ()
-  "Kill forwards from point to end of sentence."
-  (interactive)
-  (kill-region (point) (progn (segment-forward-sentence) (point))))
+(defun segment-kill-sentence (&optional arg)
+  "Kill forwards from point to end of sentence.
+With ARG, kill that many more sentences."
+  (interactive "p")
+  (kill-region (point) (progn (segment-forward-sentence arg) (point))))
 
 (defun segment--looking-back-forward-map (regex-alist &optional moving-backward)
   "Return non-nil if we are at any of the segment rules in REGEX-ALIST.
