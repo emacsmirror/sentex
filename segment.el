@@ -76,6 +76,11 @@ and if we are, run `backward-sentence' again and check again."
        :moving-backward)
     (backward-sentence)))
 
+(defun segment-kill-sentence ()
+  "Kill forwards from point to end of sentence."
+  (interactive)
+  (kill-region (point) (progn (segment-forward-sentence) (point))))
+
 (defun segment--looking-back-forward-map (regex-alist &optional moving-backward)
   "Return non-nil if we are at any of the segment rules in REGEX-ALIST.
 MOVING-BACKWARD modifies the check for when we have moved backwards."
