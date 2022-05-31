@@ -5,7 +5,7 @@
 ;; Version: 0.1
 ;; URL: https://codeberg.org/martianh/segment
 ;; Package-Requires: ((emacs "27.1"))
-;; Keywords: languages, convenience, translation, sentences, text
+;; Keywords: languages, convenience, translation, sentences, text, wp
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
