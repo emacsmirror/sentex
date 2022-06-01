@@ -24,7 +24,7 @@
 
 ;;; Commentary:
 
-;; Regexes for complex sentence segmentation rules.
+;; Regexes for complex sentence-ending rules.
 ;; Roughly ported from OmegaT and Okapi Framework default/English srx rules.
 
 ;; each rule has two regexes, before and after, to facilitate sophisticated
@@ -729,6 +729,11 @@ Used for ending or not ending sentences."
 
     ;; </languagerule>
     ))
+
+(defun segment-regexes--construct-fr-list ()
+  "Return the full collection of regex rules for French."
+  (setq segment-regexes-fr-list
+        segment-regexes-omegat-fr-list))
 
 
 (provide 'segment-regexes)
