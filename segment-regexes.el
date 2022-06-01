@@ -735,6 +735,22 @@ Used for ending or not ending sentences."
   (setq segment-regexes-fr-list
         segment-regexes-omegat-fr-list))
 
+;; awful but works match above format:
+(defvar segment-regexes-omegat-de-list
+  (segment-convert--build-regex-list-from-ruleset-struct
+   (segment-convert-ruleset-rules
+    (segment-convert--get-ruleset-by-lang
+     (segment-convert--convert-srx-file-to-elisp-pcre2el
+      segment-icu-omegat-regex-list) ; file we run on
+     "German"))))
+
+(defvar segment-regexes-omegat-cz-list
+  (segment-convert--build-regex-list-from-ruleset-struct
+   (segment-convert-ruleset-rules
+    (segment-convert--get-ruleset-by-lang
+     (segment-convert--convert-srx-file-to-elisp-pcre2el
+      segment-icu-omegat-regex-list) ; file we run on
+     "Czech"))))
 
 (provide 'segment-regexes)
 ;;; segment-regexes.el ends here
