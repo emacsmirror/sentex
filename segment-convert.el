@@ -188,23 +188,26 @@ By default, it is a before rule, with arg AFTER, it's an after one."
 ;; try to use `pcre2el' to convert (fails):
 ;;; converting the regexes in our structs from ICU to elisp
 (defun segment-convert--convert-srx-file-to-elisp-pcre2el (srx-file)
-  "Convert SRX-FILE of segmentation rules to elisp regexes.
-Return the language rulesets with their structs holding converted regexes"
+  "Convert SRX-FILE of segmentation rules to elisp regexes."
   (mapcar (lambda (x)
-            (segment-convert--convert-icu-ruleset-to-elisp-pcre2el x))
-          (segment-convert--get-rulesets-from-file srx-file))
-  segment-convert-converted-rulesets-file)
+            (list
+             (segment-convert-ruleset-language-rule-name x)
+             (segment-convert--convert-icu-ruleset-to-elisp-pcre2el x)))
+          (segment-convert--get-rulesets-from-file srx-file)))
 
 (defun segment-convert--convert-icu-ruleset-to-elisp-pcre2el (ruleset)
   "Convert a single language RULESET to elisp regexes.
-Updates the structs with the converted regex strings."
+Returns a nested list of the rules."
   (let ((rules (segment-convert-ruleset-rules ruleset)))
-    (mapc (lambda (x)
-            (setf (segment-convert-rule-before-break x)
-                  (segment-convert--convert-icu-rule-pcre2el x))
-            (setf (segment-convert-rule-after-break x)
-                  (segment-convert--convert-icu-rule-pcre2el x :after)))
-          rules)))
+    (mapcar (lambda (x)
+              (list
+               (segment-convert--convert-icu-rule-pcre2el x)
+               (segment-convert--convert-icu-rule-pcre2el x :after)
+               :break
+               (if (equal (segment-convert-rule-break x) "no")
+                   nil
+                 t)))
+            rules)))
 
 (defun segment-convert--convert-icu-rule-pcre2el (rule &optional after)
   "Convert single segmentation RULE to elisp regex.
@@ -233,11 +236,11 @@ By default, it is a before rule, with arg AFTER, it's an after one."
     (replace-match (cadr regex-pair) nil t)))
 
 ;; build lists from conv struct:
-;; TODO: or just re-write our regex mapping to use a lang ruleset struct
-
 ;; map over all langs in segment-convert-converted-full-file-set
 (defun segment-convert--build-regex-list-from-ruleset-struct (ruleset)
-  ""
+  "Return a rule list for each rule in RULESET.
+A rule list consists in a before-break regex, an after-break
+regex, and a :break flag of either nil or t."
   (mapcar (lambda (rule)
             (list (segment-convert-rule-before-break rule)
                   (segment-convert-rule-after-break rule)
@@ -246,12 +249,13 @@ By default, it is a before rule, with arg AFTER, it's an after one."
                            t)))
           ruleset))
 
-(defun segment-convert--get-ruleset-by-lang (converted-file-set language)
-  ""
+(defun segment-convert--get-ruleset-by-lang (language converted-file-set)
+  "Get ruleset for LANGUAGE from CONVERTED-FILE-SET."
   (dolist (x converted-file-set)
     (when (equal language
-                 (segment-convert-ruleset-language-rule-name x))
+                 (car x))
       (cl-return x))))
+
 
 (provide 'segment-convert)
 ;;; segment-convert.el ends here
