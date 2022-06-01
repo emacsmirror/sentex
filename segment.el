@@ -25,9 +25,9 @@
 ;; This package uses breaking and non-breaking sentence-ending rules ported
 ;; from OmegaT and Okapi Framework.
 
-;; It's very green. for now only some English rules are ported, and it only
-;; provides `segment-forward-sentence' and `segment-backward-sentence'
-;; commands for movement that respects the rules.
+;; It's pretty green for now, and only some English and French rules are ported.
+
+;; It provides `segment-forward-sentence', `segment-backward-sentence', and `segment-kill-sentence'.
 
 ;;; Code:
 
@@ -78,6 +78,7 @@ and if we are, run `backward-sentence' again and check again."
          :moving-backward)
       (backward-sentence))))
 
+;;;###autoload
 (defun segment-kill-sentence (&optional arg)
   "Kill forwards from point to end of sentence.
 With ARG, kill that many more sentences."
