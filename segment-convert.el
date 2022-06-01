@@ -33,6 +33,18 @@
 ;; instead of structs, just build a keyword plist like:
 ;; '(:break nil :before-break x :after-break y)
 
+(defvar segment-icu-omegat-regex-list
+  "~/code/elisp/segment/OmegaT-defaults/defaultRules.srx")
+
+(defvar segment-icu-okapi-regex-list
+  "~/code/elisp/segment/Okapi-defaults/defaultSegmentation.srx")
+
+(defvar segment-icu-okapi-alt-regex-list
+  "~/code/elisp/segment/Okapi-defaults/alternate-default.srx")
+
+(defvar segment-icu-icu4j-regex-list
+  "~/code/elisp/segment/Okapi-defaults/okapi_default_icu4j.srx")
+
 ;; ICU regexes support look-aheads, Elisp doesn't:
 ;; look out for (?= ...), (?! ...), (?<= ...), (?<! ...)
 ;; conversion from ICU to emacs regex:
