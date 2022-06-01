@@ -66,6 +66,28 @@
     )
   "An (in-progress) alist of ICU regex elements and their elisp equivalents.")
 
+(defvar segment-convert-icu-regex-conversion-alist-unicode-only
+  '(
+    ;; capitals are negations \p{Lu} is upper \P{Lu} is not upper
+    ("\\p{Lu}" "[[:upper:]]")
+    ("\\p{Ll}" "[[:lower:]]")
+    ("\\P{Ll}" "[^[:lower:]]")
+    ("\\P{Lu}" "[^[:upper:]]")
+    ;; ("\\P{Lu}" "[[:lower:]]") ; wrong
+    ;; ("(?i)" "") ; (case-fold-search t) ; elisp regexes ignore case by default
+    ("\\(?i\\)" "") ; (case-fold-search t) ; elisp regexes ignore case by default
+    ("\\p{Ps}" "[[({]") ; any opening bracket
+    ("\\p{pe}" "[])}]") ; any closing bracket
+    ("\\p{L}" "[[:alpha:]]") ; any letter in any language
+    ("\\p{N}" "[[:digit:]]")
+    ;; FIXME: \p{Po}: any kind of punctuation character that is not a dash, bracket, quote or connector.
+    ("\\p{Po}" "[^][(){}\"_-]")
+    ("\\p{Nd}" "[[:digit:]]")
+    ;; manually handle space also:
+    ("\\s" "[[:space:]]")))
+
+(defvar segment-convert-converted-full-file-set nil)
+
 (cl-defstruct (segment-convert-ruleset (:constructor segment-convert-ruleset-create))
   language-rule-name rules)
 
@@ -86,9 +108,10 @@
           (dom-by-tag (car parsed) 'languagerules))
          (language-rules-list
           (dom-by-tag (car language-rules-tag) 'languagerule)))
-    (mapcar (lambda (x)
-              (segment-convert--make-ruleset x))
-            language-rules-list)))
+    (setq segment-convert-converted-full-file-set
+          (mapcar (lambda (x)
+                    (segment-convert--make-ruleset x))
+                  language-rules-list))))
 
 (defun segment-convert--make-ruleset (ruleset)
   "Create a struct for RULESET."
@@ -176,7 +199,18 @@ By default, it is a before rule, with arg AFTER, it's an after one."
                          (segment-convert-rule-after-break rule)
                        (segment-convert-rule-before-break rule))))
     (unless (equal "" rule-string)
-      (pcre-to-elisp rule-string))))
+      ;; first try our incomplete unicode properties conversion
+      ;; which pcre2el can't handle:
+      (with-temp-buffer
+        ;; (with-current-buffer (get-buffer-create "test")
+        ;; (switch-to-buffer (current-buffer))
+        (erase-buffer)
+        (insert rule-string)
+        (mapc (lambda (x)
+                (segment-convert--replace-icu-regex-in-string x))
+              segment-convert-icu-regex-conversion-alist-unicode-only)
+        (pcre-to-elisp
+         (buffer-string))))))
 
 (defun segment-convert--replace-icu-regex-in-string (regex-pair)
   "Replace a matching CAR from REGEX-PAIR with its CADR."
