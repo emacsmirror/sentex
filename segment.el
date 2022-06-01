@@ -27,7 +27,8 @@
 
 ;; It's pretty green for now, and only some English and French rules are ported.
 
-;; It provides `segment-forward-sentence', `segment-backward-sentence', and `segment-kill-sentence'.
+;; It provides `segment-forward-sentence', `segment-backward-sentence', and
+;; `segment-kill-sentence'.
 
 ;;; Code:
 
@@ -48,6 +49,11 @@ Can be either 'omegat, 'okapi, 'okapi-icu4j, or 'all.
 Used by `segment-regexes--construct-en-list'."
   :type 'symbol
   :group 'segment)
+
+(defcustom segment-language "English"
+  "The language the text is in."
+  :group 'segment
+  :type 'string)
 
 ;; roll our own movement cmds:
 
