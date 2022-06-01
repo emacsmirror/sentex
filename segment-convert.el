@@ -98,7 +98,7 @@
     ;; manually handle space also:
     ("\\s" "[[:space:]]")))
 
-(defvar segment-convert-converted-full-file-set nil)
+(defvar segment-convert-converted-rulesets-file nil)
 
 (cl-defstruct (segment-convert-ruleset (:constructor segment-convert-ruleset-create))
   language-rule-name rules)
@@ -120,7 +120,7 @@
           (dom-by-tag (car parsed) 'languagerules))
          (language-rules-list
           (dom-by-tag (car language-rules-tag) 'languagerule)))
-    (setq segment-convert-converted-full-file-set
+    (setq segment-convert-converted-rulesets-file
           (mapcar (lambda (x)
                     (segment-convert--make-ruleset x))
                   language-rules-list))))
