@@ -29,20 +29,21 @@
 
 (require 'dom)
 (require 'xml)
+(require 'pcre2el)
 
 ;; instead of structs, just build a keyword plist like:
 ;; '(:break nil :before-break x :after-break y)
 
-(defvar segment-icu-omegat-regex-list
+(defvar segment-convert-icu-omegat-regex-list
   "~/code/elisp/segment/OmegaT-defaults/defaultRules.srx")
 
-(defvar segment-icu-okapi-regex-list
+(defvar segment-convert-icu-okapi-regex-list
   "~/code/elisp/segment/Okapi-defaults/defaultSegmentation.srx")
 
-(defvar segment-icu-okapi-alt-regex-list
+(defvar segment-convert-icu-okapi-alt-regex-list
   "~/code/elisp/segment/Okapi-defaults/alternate-default.srx")
 
-(defvar segment-icu-icu4j-regex-list
+(defvar segment-convert-icu-icu4j-regex-list
   "~/code/elisp/segment/Okapi-defaults/okapi_default_icu4j.srx")
 
 ;; ICU regexes support look-aheads, Elisp doesn't:
@@ -74,8 +75,7 @@
     ("\\p{Po}" "[^][(){}\"_-]")
     ;; ("{X,Y}" "\\{X,Y\\}") ; need match groups to convert this? or just:
     ("{" "\\{")
-    ("}" "\\}")
-    )
+    ("}" "\\}"))
   "An (in-progress) alist of ICU regex elements and their elisp equivalents.")
 
 (defvar segment-convert-icu-regex-conversion-alist-unicode-only
@@ -85,14 +85,11 @@
     ("\\p{Ll}" "[[:lower:]]")
     ("\\P{Ll}" "[^[:lower:]]")
     ("\\P{Lu}" "[^[:upper:]]")
-    ;; ("\\P{Lu}" "[[:lower:]]") ; wrong
-    ;; ("(?i)" "") ; (case-fold-search t) ; elisp regexes ignore case by default
     ("\\(?i\\)" "") ; (case-fold-search t) ; elisp regexes ignore case by default
     ("\\p{Ps}" "[[({]") ; any opening bracket
     ("\\p{pe}" "[])}]") ; any closing bracket
     ("\\p{L}" "[[:alpha:]]") ; any letter in any language
     ("\\p{N}" "[[:digit:]]")
-    ;; FIXME: \p{Po}: any kind of punctuation character that is not a dash, bracket, quote or connector.
     ("\\p{Po}" "[^][(){}\"_-]")
     ("\\p{Nd}" "[[:digit:]]")
     ;; manually handle space also:
@@ -176,8 +173,6 @@ By default, it is a before rule, with arg AFTER, it's an after one."
                        (segment-convert-rule-before-break rule))))
     (unless (equal "" rule-string)
       (with-temp-buffer
-        ;; (with-current-buffer (get-buffer-create "test")
-        ;; (switch-to-buffer (current-buffer))
         (erase-buffer)
         (insert rule-string)
         (mapc (lambda (x)
@@ -219,15 +214,13 @@ By default, it is a before rule, with arg AFTER, it's an after one."
       ;; first try our incomplete unicode properties conversion
       ;; which pcre2el can't handle:
       (with-temp-buffer
-        ;; (with-current-buffer (get-buffer-create "test")
-        ;; (switch-to-buffer (current-buffer))
         (erase-buffer)
         (insert rule-string)
         (mapc (lambda (x)
                 (segment-convert--replace-icu-regex-in-string x))
               segment-convert-icu-regex-conversion-alist-unicode-only)
-        (pcre-to-elisp
-         (buffer-string))))))
+        ;; then pcre2el does the rest:
+        (pcre-to-elisp (buffer-string))))))
 
 (defun segment-convert--replace-icu-regex-in-string (regex-pair)
   "Replace a matching CAR from REGEX-PAIR with its CADR."
