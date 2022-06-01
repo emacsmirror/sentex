@@ -218,5 +218,26 @@ By default, it is a before rule, with arg AFTER, it's an after one."
   (while (search-forward (car regex-pair) nil t)
     (replace-match (cadr regex-pair) nil t)))
 
+;; build lists from conv struct:
+;; TODO: or just re-write our regex mapping to use a lang ruleset struct
+
+;; map over all langs in segment-convert-converted-full-file-set
+(defun segment-convert--build-regex-list-from-ruleset-struct (ruleset)
+  ""
+  (mapcar (lambda (rule)
+            (list (segment-convert-rule-before-break rule)
+                  (segment-convert-rule-after-break rule)
+                  :break (if (equal (segment-convert-rule-break rule) "no")
+                             nil
+                           t)))
+          ruleset))
+
+(defun segment-convert--get-ruleset-by-lang (converted-file-set language)
+  ""
+  (dolist (x converted-file-set)
+    (when (equal language
+                 (segment-convert-ruleset-language-rule-name x))
+      (cl-return x))))
+
 (provide 'segment-convert)
 ;;; segment-convert.el ends here
