@@ -188,10 +188,12 @@ By default, it is a before rule, with arg AFTER, it's an after one."
 ;; try to use `pcre2el' to convert (fails):
 ;;; converting the regexes in our structs from ICU to elisp
 (defun segment-convert--convert-srx-file-to-elisp-pcre2el (srx-file)
-  "Convert SRX-FILE of segmentation rules to elisp regexes."
+  "Convert SRX-FILE of segmentation rules to elisp regexes.
+Return the language rulesets with their structs holding converted regexes"
   (mapcar (lambda (x)
             (segment-convert--convert-icu-ruleset-to-elisp-pcre2el x))
-          (segment-convert--get-rulesets-from-file srx-file)))
+          (segment-convert--get-rulesets-from-file srx-file))
+  segment-convert-converted-rulesets-file)
 
 (defun segment-convert--convert-icu-ruleset-to-elisp-pcre2el (ruleset)
   "Convert a single language RULESET to elisp regexes.
