@@ -32,11 +32,6 @@
 
 ;;; Code:
 
-;; TODO: best to keep the structure of the separate files, and let the user
-;; choose which rules to use
-
-;; TODO: okapi_default_icu4j.srx (looks more comprehensive than the other okapi)
-
 ;; NB: after-break rules must always be provided
 
 (require 'segment-convert)
