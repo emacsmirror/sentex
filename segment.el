@@ -50,13 +50,13 @@ Used by `segment-regexes--construct-en-list'."
   :type 'symbol
   :group 'segment)
 
-(defcustom segment-language "English"
+(defcustom segment-current-language "English"
   "The language the text is in."
   :group 'segment
   :type 'string)
 
 ;; roll our own movement cmds:
-
+;; TODO: abstract language choice out of these
 ;;;###autoload
 (defun segment-forward-sentence (&optional arg)
   "Call `forward-sentence' ARG number of times.

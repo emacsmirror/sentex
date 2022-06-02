@@ -744,6 +744,13 @@ Used for ending or not ending sentences."
     (segment-convert--convert-srx-file-to-elisp-pcre2el ; convert file
      segment-convert-icu-omegat-regex-list)))) ; file we run on
 
+(defvar segment-regexes-icu4j-de-list
+  (cadr
+   (segment-convert--get-ruleset-by-lang ; single lang
+    "German"
+    (segment-convert--convert-srx-file-to-elisp-pcre2el ; convert file
+     segment-convert-icu-icu4j-regex-list)))) ; file we run on
+
 (defvar segment-regexes-omegat-cz-list
   (cadr
    (segment-convert--get-ruleset-by-lang ; single lang

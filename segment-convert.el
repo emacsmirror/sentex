@@ -86,9 +86,13 @@
     ("\\p{Ll}" "[[:lower:]]")
     ("\\P{Ll}" "[^[:lower:]]")
     ("\\P{Lu}" "[^[:upper:]]")
+    ("\\p{Lo}" "") ; FIXME: letter that doesn't have upper/lower variants
+    ("\\p{Lt}" "[[:upper:]]\\{1\\}[[:lower:]]+") ; title case word
     ("\\(?i\\)" "") ; (case-fold-search t) ; elisp regexes ignore case by default
     ("\\p{Ps}" "[[({]") ; any opening bracket
     ("\\p{pe}" "[])}]") ; any closing bracket
+    ("\\p{Pi}" "[\"'«‹‘“„‚]") ; any kind of opening quote
+    ("\\p{Pf}" "[\"'”’“‘»›]") ; any kind of closing quote
     ("\\p{L}" "[[:alpha:]]") ; any letter in any language
     ("\\p{N}" "[[:digit:]]")
     ("\\p{Po}" "[^][(){}\"_-]")
