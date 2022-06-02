@@ -12,7 +12,7 @@ Some functions are also included which add the before-break rules to [[https://g
 
 * converting all rulesets
 
-I'm working on programmatically converting the rulesets for all languages that have one. Work so far is in =segment-convert.el=. I'm correcting errors as I encounter them.
+I'm working on programmatically converting the rulesets for all languages that have one. Work so far is in =segment-convert.el=. Output files have the suffix =-rules-converted.el=. I'm correcting errors as I encounter them, testing mainly with German, French, English, and possibly Portuguese.
 
 * features
 
