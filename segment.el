@@ -55,10 +55,8 @@ Used by `segment--build-rule-list'."
   :type 'string)
 
 ;;; Converted files:
-;; TODO: abstract the location of our data files. using a relative path won't
-;; work if we call a segment sentence function in another buffer
-;; maybe `package-desc-dir?'
-(defvar segment-directory "~/code/elisp/segment/")
+(defvar segment-directory
+  (file-name-directory (locate-library "segment")))
 (defvar segment-icu4j-file
   (concat segment-directory "segment-icu4j-rules-converted.el"))
 (defvar segment-omegat-file
