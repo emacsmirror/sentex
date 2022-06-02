@@ -4,7 +4,7 @@ This repo is an attempt to port somplex sentence-ending rules from OmegaT and th
 
 OmegaT and the Okapi Framework use ICU regular expressions stored in SRX files (copied into this repo) to create sophisticated rules for segmenting texts. Each rule has a before break and after break regular expression, as well as a boolean break or don't break value.
 
-For now, some English and French rules have been ported, and an untested bulk conversion of the regexes is draft. Two movement functions exist: =segment-forward-sentence= and =segment-backward-sentence=.
+For now, some English and French rules have been ported by hand, and a bulk conversion of regexes for all languages is drafted. Two movement functions exist: =segment-forward-sentence= and =segment-backward-sentence=.
 
 As this is new code, it hasn't been tested much at all. In particular, I don't yet know how it interacts with custom =sentence-end= values, or other possible snags, such as anyone else's Emacs other than mine (or even mine).
 
@@ -12,7 +12,7 @@ Some functions are also included which add the before-break rules to [[https://g
 
 * converting all rulesets
 
-I'm working on programmatically converting the rulesets for all languages that have one. Work so far is in =segment-convert.el=. Output files have the suffix =-rules-converted.el=. I'm correcting errors as I encounter them, testing mainly with German, French, English, and possibly Portuguese.
+I'm working on programmatically converting the rulesets for all languages that have one. Work so far is in =segment-convert.el=. Output files have the suffix =-rules-converted.el=. There are three kinds: OmegaT, Okapi alt, and ICU4J. I'm correcting errors as I encounter them, testing mainly with German, French, English, and possibly Portuguese.
 
 * features
 
