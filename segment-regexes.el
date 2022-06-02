@@ -39,6 +39,8 @@
 
 ;; NB: after-break rules must always be provided
 
+(require 'segment-convert)
+
 (defvar segment-regexes-en-list nil
   "Holds the composite list of en regexes.
 \nRun `segment-regexes-construct-en-list' to obtain the overall value.")
@@ -740,14 +742,14 @@ Used for ending or not ending sentences."
    (segment-convert--get-ruleset-by-lang ; single lang
     "German"
     (segment-convert--convert-srx-file-to-elisp-pcre2el ; convert file
-     segment-icu-omegat-regex-list)))) ; file we run on
+     segment-convert-icu-omegat-regex-list)))) ; file we run on
 
 (defvar segment-regexes-omegat-cz-list
   (cadr
    (segment-convert--get-ruleset-by-lang ; single lang
     "Czech"
     (segment-convert--convert-srx-file-to-elisp-pcre2el ; convert file
-     segment-icu-omegat-regex-list)))) ; file we run on
+     segment-convert-icu-omegat-regex-list)))) ; file we run on
 
 (provide 'segment-regexes)
 ;;; segment-regexes.el ends here

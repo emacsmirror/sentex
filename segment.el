@@ -32,8 +32,8 @@
 
 ;;; Code:
 
-(require 'segment-regexes)
 (require 'segment-convert)
+(require 'segment-regexes)
 ;; (require 'sentence-navigation)
 
 (require 'xml)
