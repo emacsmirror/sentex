@@ -8,8 +8,6 @@ For now, some English and French rules have been ported by hand, and a bulk conv
 
 As this is new code, it hasn't been tested much at all. In particular, I don't yet know how it interacts with custom =sentence-end= values, or other possible snags, such as anyone else's Emacs other than mine (or even mine).
 
-Some functions are also included which add the before-break rules to [[https://github.com/noctuid/emacs-sentence-navigation][emacs-sentence-navigation]]'s abbreviation list and then call one of its sentence movement functions. As I don't know that code very well, I'm not yet sure how to implement the after-break rules.
-
 * converting all rulesets
 
 I'm working on programmatically converting the rulesets for all languages that have one. Work so far is in =segment-convert.el=. Output files have the suffix =-rules-converted.el=. There are three kinds: OmegaT, Okapi alt, and ICU4J. I'm correcting errors as I encounter them, testing mainly with German, French, English, and possibly Portuguese.
