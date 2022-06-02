@@ -1,18 +1,18 @@
 * segment
 
-This repo is an attempt to port sentence ending rules from OmegaT and the Okapi Framework to Emacs Lisp.
+This repo is an attempt to port somplex sentence-ending rules from OmegaT and the Okapi Framework to Emacs Lisp.
 
 OmegaT and the Okapi Framework use ICU regular expressions stored in SRX files (copied into this repo) to create sophisticated rules for segmenting texts. Each rule has a before break and after break regular expression, as well as a boolean break or don't break value.
 
-For now, only some English rules have been ported, and only two movement functions exist: =segment-forward-sentence= and =segment-backward-sentence=.
+For now, some English and French rules have been ported, and an untested bulk conversion of the regexes is draft. Two movement functions exist: =segment-forward-sentence= and =segment-backward-sentence=.
 
 As this is new code, it hasn't been tested much at all. In particular, I don't yet know how it interacts with custom =sentence-end= values, or other possible snags, such as anyone else's Emacs other than mine (or even mine).
 
-Some functions are also included which add the before-break rules to [[https://github.com/noctuid/emacs-sentence-navigation][emacs-sentence-navigation]]'s abbreviation list and then call on of its sentence movement functions. As I don't know that code very well, I'm not yet sure how to implement the after-break rules.
+Some functions are also included which add the before-break rules to [[https://github.com/noctuid/emacs-sentence-navigation][emacs-sentence-navigation]]'s abbreviation list and then call one of its sentence movement functions. As I don't know that code very well, I'm not yet sure how to implement the after-break rules.
 
 * converting all rulesets
 
-I'm also hoping to programmatically convert the rulesets for all languages that have one. Converting regular expression syntax using regular expressions is a headfuck though. Work so far is in =segment-convert.el=. Any help would be appreciated.
+I'm working on programmatically converting the rulesets for all languages that have one. Work so far is in =segment-convert.el=. I'm correcting errors as I encounter them.
 
 * features
 
