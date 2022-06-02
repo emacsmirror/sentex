@@ -28,6 +28,9 @@
 ;; It provides `segment-forward-sentence', `segment-backward-sentence', and
 ;; `segment-kill-sentence'.
 
+;; Customize `segment-ruleset-framework' to select which framework to use.
+;; Set `segment-current-language' to choose what language's rules to use.
+
 ;;; Code:
 
 (require 'segment-convert)
@@ -47,11 +50,14 @@ Used by `segment--build-rule-list'."
   :group 'segment)
 
 (defcustom segment-current-language "English"
-  "The language the text is in."
+  "The language for which the segmentation rules are to be used."
   :group 'segment
   :type 'string)
 
 ;;; Converted files:
+;; TODO: abstract the location of our data files. using a relative path won't
+;; work if we call a segment sentence function in another buffer
+;; maybe `package-desc-dir?'
 (defvar segment-directory "~/code/elisp/segment/")
 (defvar segment-icu4j-file
   (concat segment-directory "segment-icu4j-rules-converted.el"))
