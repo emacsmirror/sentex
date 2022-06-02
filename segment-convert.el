@@ -4,7 +4,7 @@
 ;; Author:Marty Hiatt <martianhiatus AT riseup.net>
 ;; Version: 0.1
 ;; URL: https://codeberg.org/martianh/segment
-;; Package-Requires: ((emacs "27.1"))
+;; Package-Requires: ((emacs "27.1") (pcre2el "1.8"))
 ;; Keywords: languages, convenience, translation, sentences, text
 
 ;; This program is free software; you can redistribute it and/or modify
@@ -22,8 +22,9 @@
 
 ;;; Commentary:
 
-;; Rough and ready conversion of ICU regexes into elisp.
-;; The rules are ad-hoc, and only added as I come across them.
+;; Rough and ready conversion of ICU regexes into elisp. The rules are ad-hoc,
+;; and only added as I come across them. We do our own conversion of ICU
+;; Unicode property expressions, then handover to `pcre2el' to do the rest.
 
 ;;; Code:
 
