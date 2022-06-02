@@ -744,12 +744,26 @@ Used for ending or not ending sentences."
     (segment-convert--convert-srx-file-to-elisp-pcre2el ; convert file
      segment-convert-icu-omegat-regex-list)))) ; file we run on
 
+(defvar segment-regexes-de-list nil)
+
+(defvar segment-regexes-additional-de-list nil)
+
 (defvar segment-regexes-icu4j-de-list
   (cadr
    (segment-convert--get-ruleset-by-lang ; single lang
     "German"
     (segment-convert--convert-srx-file-to-elisp-pcre2el ; convert file
      segment-convert-icu-icu4j-regex-list)))) ; file we run on
+
+(defun segment-regexes--construct-de-list ()
+  "Return the full collection of regex rules for German."
+  (setq segment-regexes-de-list
+        (append
+         (cond ((equal segment-ruleset-framework 'omegat)
+                segment-regexes-omegat-de-list)
+               ((equal segment-ruleset-framework 'icu4j)
+                segment-regexes-icu4j-de-list))
+         segment-regexes-additional-de-list)))
 
 (defvar segment-regexes-omegat-cz-list
   (cadr
