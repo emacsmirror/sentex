@@ -92,7 +92,7 @@ With ARG, kill that many more sentences."
   (kill-region (point) (progn (segment-forward-sentence arg) (point))))
 
 (defun segment--looking-back-forward-map (regex-alist &optional moving-backward)
-  "Return non-nil if we are at any of the segment rules in REGEX-ALIST.
+  "Return non-nil if we are at a non-break rule in REGEX-ALIST.
 MOVING-BACKWARD modifies the check for when we have moved backwards."
   (let ((case-fold-search nil))
     (cl-dolist (reg-pair regex-alist)
@@ -112,7 +112,9 @@ MOVING-BACKWARD modifies the check for when we have moved backwards."
                      (save-excursion
                        (forward-whitespace -1) ; back over whitespace
                        (looking-at (cadr reg-pair)))
-                   (looking-at (cadr reg-pair))))
+                   (looking-at (cadr reg-pair)))
+                 ;; only when we hit nil break rules
+                 (not (plist-get reg-pair :break)))
         (cl-return reg-pair)))))
 
 ;; modify sentence-nav functions:
