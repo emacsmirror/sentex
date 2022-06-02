@@ -25,8 +25,6 @@
 ;; This package uses breaking and non-breaking sentence-ending rules ported
 ;; from OmegaT and Okapi Framework.
 
-;; It's pretty green for now, and only some English and French rules are ported.
-
 ;; It provides `segment-forward-sentence', `segment-backward-sentence', and
 ;; `segment-kill-sentence'.
 
@@ -34,8 +32,6 @@
 
 (require 'segment-convert)
 (require 'segment-regexes)
-;; (require 'sentence-navigation)
-
 (require 'xml)
 (require 'dom)
 
@@ -45,8 +41,8 @@
 
 (defcustom segment-ruleset-framework 'icu4j
   "Framework to use for break/non-break rules.
-Can be either 'omegat, 'okapi, 'icu4j, or 'all.
-Used by `segment-regexes--construct-en-list'."
+Can be either 'omegat, 'okapi-alt, 'icu4j, or 'all.
+Used by `segment--build-rule-list'."
   :type 'symbol
   :group 'segment)
 
@@ -55,34 +51,68 @@ Used by `segment-regexes--construct-en-list'."
   :group 'segment
   :type 'string)
 
+;;; Converted files:
+(defvar segment-directory "~/code/elisp/segment/")
+(defvar segment-icu4j-file
+  (concat segment-directory "segment-icu4j-rules-converted.el"))
+(defvar segment-omegat-file
+  (concat segment-directory "segment-omegat-rules-converted.el"))
+(defvar segment-okapi-alt-file
+  (concat segment-directory "segment-okapi-alt-rules-converted.el"))
+
+(defun segment--get-lang-ruleset-from-file (language file)
+  "Return ruleset for LANGUAGE from converted rulesets FILE.
+Language is a string, like \"English\"."
+  (cadr
+   (segment-convert--get-ruleset-by-lang
+    language
+    (with-temp-buffer
+      (insert-file-contents file)
+      (read (current-buffer))))))
+
+(defun segment--build-rule-list (&optional language)
+  ""
+  (append
+   (cond ((equal segment-ruleset-framework 'omegat)
+          (segment--get-lang-ruleset-from-file
+           (or language segment-current-language)
+           segment-omegat-file))
+         ((equal segment-ruleset-framework 'icu4j)
+          (segment--get-lang-ruleset-from-file
+           (or language segment-current-language)
+           segment-icu4j-file))
+         ((equal segment-ruleset-framework 'okapi-alt)
+          (segment--get-lang-ruleset-from-file
+           (or language segment-current-language)
+           segment-okapi-alt-file)))))
+;; TODO: single point to fetch our own additional rules
+;; (segment--get-additional-rules language)))
+
 ;; roll our own movement cmds:
-;; TODO: abstract language choice out of these
 ;;;###autoload
 (defun segment-forward-sentence (&optional arg)
   "Call `forward-sentence' ARG number of times.
-Check if we are after any entries in `segment-regexes-en-list',
-and if we are, run `forward-sentence' again and check again."
+Check if point matches any break rules for `segment-current-language',
+and if it does, run `forward-sentence' again and check again."
   (interactive "p")
   (dotimes (count (or arg 1))
     (forward-sentence)
     (while
-        (segment--looking-back-forward-map
-         (segment-regexes--construct-en-list))
-      (forward-sentence))))
+        (segment--looking-back-forward-map segment-current-language))
+    (forward-sentence)))
 
 ;;;###autoload
 (defun segment-backward-sentence (&optional arg)
   "Call `backward-sentence' ARG number of times.
-Check if we are after any entries in `segment-regexes-en-list',
-and if we are, run `backward-sentence' again and check again."
+Check if point matches any break rules for `segment-current-language',
+and if it does, run `backward-sentence' again and check again."
   (interactive "p")
   (dotimes (count (or arg 1))
     (backward-sentence)
     (while
-        (segment--looking-back-forward-map
-         (segment-regexes--construct-en-list)
-         :moving-backward)
-      (backward-sentence))))
+        (segment--looking-back-forward-map segment-current-language)
+      :moving-backward)
+    (backward-sentence)))
 
 ;;;###autoload
 (defun segment-kill-sentence (&optional arg)
@@ -91,10 +121,11 @@ With ARG, kill that many more sentences."
   (interactive "p")
   (kill-region (point) (progn (segment-forward-sentence arg) (point))))
 
-(defun segment--looking-back-forward-map (regex-alist &optional moving-backward)
-  "Return non-nil if we are at a non-break rule in REGEX-ALIST.
+(defun segment--looking-back-forward-map (language &optional moving-backward)
+  "Return non-nil if we are at a non-break rule for LANGUAGE.
 MOVING-BACKWARD modifies the check for when we have moved backwards."
-  (let ((case-fold-search nil))
+  (let ((case-fold-search nil)
+        (regex-alist (segment--build-rule-list language)))
     (cl-dolist (reg-pair regex-alist)
       (when (and (looking-back
                   ;; before-break regex
