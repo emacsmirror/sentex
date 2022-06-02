@@ -720,7 +720,7 @@ Used for ending or not ending sentences."
     ;; <afterbreak>[\u00A0\s]»</afterbreak>
     ;; </rule>
 
-    ("[.?!][\u00A0[:blank]]»"
+    ("[.?!][\u00A0[:blank:]]»"
      "[[:space:]]" :break nil)
     ;; <rule break="no">
     ;; <beforebreak>[\.\?\!][\u00A0\s]»</beforebreak>
