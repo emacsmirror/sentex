@@ -2,7 +2,7 @@
 
 ;; Copyright (C) 2022 Marty Hiatt <martianhiatus AT riseup.net>
 ;; Author: Marty Hiatt <martianhiatus AT riseup.net>
-;; Version: 0.1
+;; Version: 0.2
 ;; URL: https://codeberg.org/martianh/segment
 ;; Package-Requires: ((emacs "27.1"))
 ;; Keywords: languages, convenience, translation, sentences, text
@@ -24,11 +24,14 @@
 
 ;;; Commentary:
 
-;; Regexes for complex sentence-ending rules.
-;; Roughly ported from OmegaT and Okapi Framework default/English srx rules.
+;; Regexes for complex sentence-ending rules, roughly ported from OmegaT and
+;; Okapi Framework default/English srx rules.
 
 ;; each rule has two regexes, before and after, to facilitate sophisticated
 ;; conditional breaks, such as break only if regex X is followed by regex Y.
+
+;; You probably don't want to use these, but use the automatically converted
+;; rulesets instead.
 
 ;;; Code:
 

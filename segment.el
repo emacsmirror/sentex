@@ -2,7 +2,7 @@
 
 ;; Copyright (C) 2022 Marty Hiatt <martianhiatus AT riseup.net>
 ;; Author: Marty Hiatt <martianhiatus AT riseup.net>
-;; Version: 0.1
+;; Version: 0.2
 ;; URL: https://codeberg.org/martianh/segment
 ;; Package-Requires: ((emacs "27.1"))
 ;; Keywords: languages, convenience, translation, sentences, text, wp
@@ -81,15 +81,19 @@ This can be changed on a per-buffer basis by calling `segment-set-language-for-b
 
 (defun segment-set-language-for-buffer ()
   "Set the language ruleset to use for current buffer, using completion.
-Note that different frameworks support different languages, so if your desired language does not appear, customize `segment-ruleset-framework' and try again."
+Note that different frameworks support different languages, so if
+your desired language does not appear, customize
+`segment-ruleset-framework' and try again."
   (interactive)
   (let* ((langs
           (segment--get-langs-from-file (segment--current-framework-file)))
-         (lang-choice (completing-read
-                       (format "Set segment.el language for current buffer (%s): " segment-ruleset-framework)
-                       langs
-                       nil t
-                       segment-current-language)))
+         (lang-choice
+          (completing-read
+           (format "Set segment.el language for current buffer (%s): "
+                   segment-ruleset-framework)
+           langs
+           nil t
+           segment-current-language)))
     (setq-local segment-current-language lang-choice)
     (message "Using %s rules for current buffer." lang-choice)))
 
@@ -113,7 +117,8 @@ Language is a string, like \"English\"."
       (read (current-buffer))))))
 
 (defun segment--build-rule-list (&optional language)
-  ""
+  "Build ruleset list for LANGUAGE.
+Add any additional rules to the converted rulesets."
   (append
    (segment--get-lang-ruleset-from-file
     (or language segment-current-language)

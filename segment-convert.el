@@ -1,8 +1,8 @@
 ;;; segment-convert.el --- Convert srx ICU regexes to elisp  -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2022 Marty Hiatt <martianhiatus AT riseup.net>
-;; Author:Marty Hiatt <martianhiatus AT riseup.net>
-;; Version: 0.1
+;; Author: Marty Hiatt <martianhiatus AT riseup.net>
+;; Version: 0.2
 ;; URL: https://codeberg.org/martianh/segment
 ;; Package-Requires: ((emacs "27.1") (pcre2el "1.8"))
 ;; Keywords: languages, convenience, translation, sentences, text
@@ -185,7 +185,7 @@ By default, it is a before rule, with arg AFTER, it's an after one."
               segment-convert-icu-regex-conversion-alist)
         (buffer-string)))))
 
-;; try to use `pcre2el' to convert (fails):
+;;; use `pcre2el' to convert:
 ;;; converting the regexes in our structs from ICU to elisp
 (defun segment-convert--convert-srx-file-to-elisp-pcre2el (srx-file)
   "Convert SRX-FILE of segmentation rules to elisp regexes."
