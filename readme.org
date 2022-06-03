@@ -1,21 +1,29 @@
 * segment
 
-This repo is an attempt to port somplex sentence-ending rules from OmegaT and the Okapi Framework to Emacs Lisp.
+This repo ports complex sentence-ending rules from OmegaT and the Okapi Framework to Emacs Lisp, and then provides sentence-based functions based on the rules. Two movement functions exist: =segment-forward-sentence= and =segment-backward-sentence=, as well as =segment-kill-sentence=.
+
+To set the framework to use, customize =segment-ruleset-framework=. To set the language ruleset to use, customize =segment-current-language=, or if you want it to be buffer-local, run =segment-set-language-for-buffer=. OmegaT and the Okapi Framework each support different languages, so if your language doesn't appear in the completion list, try using a different framework. Languages supported by the currently set framework are returned by =segment-get-valid-langs=.
+
+As this is new code, it hasn't been tested much. In particular, I don't yet know how it interacts with custom =sentence-end= values, or other possible snags, such as anyone else's Emacs other than mine (or even mine).
+
+* conversion
 
 OmegaT and the Okapi Framework use ICU regular expressions stored in SRX files (copied into this repo) to create sophisticated rules for segmenting texts. Each rule has a before break and after break regular expression, as well as a boolean break or don't break value.
 
-For now, some English and French rules have been ported by hand, and a bulk conversion of regexes for all languages is drafted. Two movement functions exist: =segment-forward-sentence= and =segment-backward-sentence=.
+The rules have been converted in part by hand (the Unicode property parts of the ICU regexes) and partly using =pcre2el= (for the rest). The process is ad-hoc, there may be errors, they'll be corrected as they're found.
 
-As this is new code, it hasn't been tested much at all. In particular, I don't yet know how it interacts with custom =sentence-end= values, or other possible snags, such as anyone else's Emacs other than mine (or even mine).
-
-* converting all rulesets
-
-I'm working on programmatically converting the rulesets for all languages that have one. Work so far is in =segment-convert.el=. Output files have the suffix =-rules-converted.el=. There are three kinds: OmegaT, Okapi alt, and ICU4J. I'm correcting errors as I encounter them, testing mainly with German, French, English, and possibly Portuguese.
+The bulk converted ruleset files used by =segment= have the suffix =-rules-converted.el=. There are three kinds: OmegaT, Okapi alt, and ICU4J.
 
 * features
 
 - sophisticated non-break and break rules for common abbreviations and other situations where a dot doesn't end a sentence.
-- add you own custom rules.
-- doesn't tell you to shut up and use two spaces for periods, as if that were a solution (what if you're not the one typing the spaces after the periods, and you have a whole book of periods? are you going to tell me to use a regex to replace all the single space periods with double spaces...?)
+- add your own custom rules [WIP]
 - doesn't assume sentences begin with a capital letter.
 - should work with filled text.
+- doesn't tell you to shut up and use two spaces for periods, as if that were a solution (what if you're not the one typing the spaces after the periods, and you have a whole book of periods? are you going to tell me to use a regex to replace all the single space periods with double spaces...?)
+
+* contributing
+
+Contributions are most welcome.
+
+If your regex foo is half-decent, it's already better than mine.
