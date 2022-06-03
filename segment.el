@@ -43,15 +43,17 @@
   :group 'editing)
 
 (defcustom segment-ruleset-framework 'icu4j
-  "Framework to use for break/non-break rules.
-Can be either 'omegat, 'okapi-alt, 'icu4j, or 'all.
-Used by `segment--build-rule-list'."
-  :type 'symbol
-  :group 'segment)
+  "Framework to use for break/non-break rulesets."
+  :type '(choice (const :tag "ICU4J" icu4j)
+                 (const :tag "OmegaT" omegat)
+                 (const :tag "Okapi alternative" okapi-alt)))
 
 (defcustom segment-current-language "English"
   "The language for which the segmentation rules are to be used.
-This can be changed on a per-buffer basis by calling `segment-set-language-for-buffer'. Note that different frameworks support different languages. Run `segment-get-valid-langs' to see what languages the current framework supports."
+This can be changed on a per-buffer basis by calling
+`segment-set-language-for-buffer'. Note that different frameworks
+support different languages. Run `segment-get-valid-langs' to see
+what languages the current framework supports."
   :group 'segment
   :type 'string)
 
