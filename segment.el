@@ -102,8 +102,8 @@ and if it does, run `forward-sentence' again and check again."
   (dotimes (count (or arg 1))
     (forward-sentence)
     (while
-        (segment--looking-back-forward-map segment-current-language))
-    (forward-sentence)))
+        (segment--looking-back-forward-map segment-current-language)
+      (forward-sentence))))
 
 ;;;###autoload
 (defun segment-backward-sentence (&optional arg)
@@ -114,9 +114,9 @@ and if it does, run `backward-sentence' again and check again."
   (dotimes (count (or arg 1))
     (backward-sentence)
     (while
-        (segment--looking-back-forward-map segment-current-language)
-      :moving-backward)
-    (backward-sentence)))
+        (segment--looking-back-forward-map segment-current-language
+                                           :moving-backward)
+      (backward-sentence))))
 
 ;;;###autoload
 (defun segment-kill-sentence (&optional arg)
