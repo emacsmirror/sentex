@@ -89,7 +89,7 @@ These additional rules are added to the converted rulesets.
 \"(\"Language\" ((\"before-break-re\" \"after-break-re\" :break
 BREAK-BOOLEAN))\". This is to match the converted rule lists, so
 they can be easily combined."
-  :group 'segment-regexes
+  :group 'segment
   ;; TODO: fix defcustom custom rules type structure
   :type 'alist)
 
