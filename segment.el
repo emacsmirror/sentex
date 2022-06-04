@@ -72,6 +72,11 @@ what languages the current framework supports."
 (defvar segment-okapi-alt-file
   (concat segment-directory "segment-okapi-alt-rules-converted.el"))
 
+(defun segment-get-valid-langs ()
+  "Return the list of languages supported by `segment-current-language'."
+  (interactive)
+  (segment--get-langs-from-file (segment--current-framework-file)))
+
 (defun segment--current-framework-file ()
   "Return the current ruleset file given `segment-ruleset-framework'."
   (cond ((equal segment-ruleset-framework 'omegat)
