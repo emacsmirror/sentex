@@ -135,11 +135,15 @@ your desired language does not appear, customize
     (setq-local segment-current-language lang-choice)
     (message "Using %s rules for current buffer." lang-choice)))
 
+(defun segment--read-file (file)
+  "Read FILE."
+  (with-temp-buffer
+    (insert-file-contents file)
+    (read (current-buffer))))
+
 (defun segment--get-langs-from-file (file)
   "Return the languages with rulesets in FILE."
-  (let ((rulesets (with-temp-buffer
-                    (insert-file-contents file)
-                    (read (current-buffer)))))
+  (let ((rulesets (segment--read-file file)))
     (mapcar (lambda (x)
               (car x))
             rulesets)))
@@ -157,9 +161,7 @@ Language is a string, like \"English\"."
   (cadr
    (segment--get-ruleset-by-lang
     language
-    (with-temp-buffer
-      (insert-file-contents file)
-      (read (current-buffer))))))
+    (segment--read-file file))))
 
 (defun segment--get-custom-rules (language)
   "Return the set of custom rules for LANGUAGE."
