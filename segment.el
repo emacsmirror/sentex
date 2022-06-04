@@ -57,10 +57,41 @@ what languages the current framework supports."
   :group 'segment
   :type 'string)
 
-(defun segment-get-valid-langs ()
-  "Return the list of languages supported by `segment-current-language'."
-  (interactive)
-  (segment--get-langs-from-file (segment--current-framework-file)))
+(defcustom segment-custom-rules-list
+  '(("English"
+    ;;; segment.el additions
+
+     ;; Sr. / Jr. can end a sentence
+     ;; a single title addition from okapi above (otherwise we are using omegat)
+     (("[JS]r\\."
+       "[[:space:]][[:lower:]]" :break nil)
+
+      ;; this is wrong, but how to differentiate U.S. ending a sentence, and
+      ;; U.S. followed by a proper noun?
+      ;; omegat's U.K. rule only mandates a space, which is also imperfect
+      ("U\\.S\\."
+       "[[:space:]][[:lower:]]" :break nil)
+
+      ;; chars + period + closing bracket followed by space + lower char
+      ("[[:lower:]]+\\.[])}]"
+       "[[:space:]][[:lower:]]" :break nil)
+
+      ;; Name initials can be preceded by opening quotation mark
+      ;; and space should be an after break
+      ;; fix for okapi regex above
+      ("[^\\.][[:space:]][\"“]?[A-Z]\\."
+       "[[:space:]]" :break nil)
+
+      ;; opus abbrev:
+      ("[Oo]p\\."
+       "[[:space:]][[:digit:]]" :break nil))))
+  "Custom regexes of before break / after break rules.
+These additional rules are added to the converted rulesets.
+\nCustom rules are grouped by language, and take the format
+\"(\"Language\" ((\"before-break-re\" \"after-break-re\" :break
+BREAK-BOOLEAN))\"."
+  :group 'segment-regexes
+  :type 'alist)
 
 ;;; Converted files:
 (defvar segment-directory
@@ -130,15 +161,19 @@ Language is a string, like \"English\"."
       (insert-file-contents file)
       (read (current-buffer))))))
 
+(defun segment--get-custom-rules (language)
+  "Return the set of custom rules for LANGUAGE."
+  (cadr
+   (segment--get-ruleset-by-lang language segment-custom-rules-list)))
+
 (defun segment--build-rule-list (&optional language)
   "Build ruleset list for LANGUAGE.
 Add any additional rules to the converted rulesets."
   (append
    (segment--get-lang-ruleset-from-file
     (or language segment-current-language)
-    (segment--current-framework-file))))
-;; ;; TODO: single point to fetch our own additional rules
-;; (segment--get-additional-rules language)))
+    (segment--current-framework-file))
+   (segment--get-custom-rules language)))
 
 ;; roll our own movement cmds:
 ;;;###autoload
