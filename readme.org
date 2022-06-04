@@ -14,10 +14,14 @@ The rules have been converted in part by hand (the Unicode property parts of the
 
 The bulk converted ruleset files used by =segment= have the suffix =-rules-converted.el=. There are three kinds: OmegaT, Okapi alt, and ICU4J.
 
+* custom rules
+
+You can add your own custom rules by customizing =segment-custom-rules-regex-list=. See it's default value for the form the rules take.
+
 * features
 
 - sophisticated non-break and break rules for common abbreviations and other situations where a dot doesn't end a sentence.
-- add your own custom rules [WIP]
+- add your own custom rules
 - doesn't assume sentences begin with a capital letter.
 - should work with filled text.
 - doesn't tell you to shut up and use two spaces for periods, as if that were a solution (what if you're not the one typing the spaces after the periods, and you have a whole book of periods? are you going to tell me to use a regex to replace all the single space periods with double spaces...?)
