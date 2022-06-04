@@ -130,8 +130,7 @@ your desired language does not appear, customize
            (format "Set segment.el language for current buffer (%s): "
                    segment-ruleset-framework)
            langs
-           nil t
-           segment-current-language)))
+           nil t)))
     (setq-local segment-current-language lang-choice)
     (message "Using %s rules for current buffer." lang-choice)))
 
