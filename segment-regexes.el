@@ -730,6 +730,7 @@ Used for ending or not ending sentences."
     ;; </languagerule>
     ))
 
+(defvar segment-regexes-fr-list nil)
 
 (defun segment-regexes--construct-fr-list ()
   "Return the full collection of regex rules for French."

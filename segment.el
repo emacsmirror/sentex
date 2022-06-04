@@ -183,7 +183,7 @@ Add any additional rules to the converted rulesets."
 Check if point matches any break rules for `segment-current-language',
 and if it does, run `forward-sentence' again and check again."
   (interactive "p")
-  (dotimes (count (or arg 1))
+  (dotimes (_count (or arg 1))
     (forward-sentence)
     (while
         (segment--looking-back-forward-map segment-current-language)
@@ -195,7 +195,7 @@ and if it does, run `forward-sentence' again and check again."
 Check if point matches any break rules for `segment-current-language',
 and if it does, run `backward-sentence' again and check again."
   (interactive "p")
-  (dotimes (count (or arg 1))
+  (dotimes (_count (or arg 1))
     (backward-sentence)
     (while
         (segment--looking-back-forward-map segment-current-language
