@@ -57,7 +57,7 @@ what languages the current framework supports."
   :group 'segment
   :type 'string)
 
-(defcustom segment-custom-rules-list
+(defcustom segment-custom-rules-regex-list
   '(("English"
      ;; Sr. / Jr. can end a sentence
      ;; a single title addition from okapi above (otherwise we are using omegat)
@@ -86,12 +86,18 @@ what languages the current framework supports."
   "Custom regexes of before break / after break rules.
 These additional rules are added to the converted rulesets.
 \nCustom rules are grouped by language, and take the format
-\"(\"Language\" ((\"before-break-re\" \"after-break-re\" :break
+\"(\"LANGUAGE\" ((\"BEFORE-BREAK-RE\" \"AFTER-BREAK-RE\" :break
 BREAK-BOOLEAN))\". This is to match the converted rule lists, so
 they can be easily combined."
   :group 'segment
-  ;; TODO: fix defcustom custom rules type structure
-  :type 'alist)
+  :type '(alist :key-type (string :tag "Language")
+                :value-type (list (alist :key-type
+                                         (string :tag "before-break")
+                                         :value-type
+                                         (group
+                                          (string :tag "after-break")
+                                          (const :break)
+                                          (boolean :tag "break-value"))))))
 
 ;;; Converted files:
 (defvar segment-directory
@@ -165,7 +171,7 @@ Language is a string, like \"English\"."
 (defun segment--get-custom-rules (language)
   "Return the set of custom rules for LANGUAGE."
   (cadr
-   (segment--get-ruleset-by-lang language segment-custom-rules-list)))
+   (segment--get-ruleset-by-lang language segment-custom-rules-regex-list)))
 
 (defun segment--build-rule-list (&optional language)
   "Build ruleset list for LANGUAGE.
