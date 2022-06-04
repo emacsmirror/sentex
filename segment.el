@@ -59,8 +59,6 @@ what languages the current framework supports."
 
 (defcustom segment-custom-rules-list
   '(("English"
-    ;;; segment.el additions
-
      ;; Sr. / Jr. can end a sentence
      ;; a single title addition from okapi above (otherwise we are using omegat)
      (("[JS]r\\."
@@ -89,8 +87,10 @@ what languages the current framework supports."
 These additional rules are added to the converted rulesets.
 \nCustom rules are grouped by language, and take the format
 \"(\"Language\" ((\"before-break-re\" \"after-break-re\" :break
-BREAK-BOOLEAN))\"."
+BREAK-BOOLEAN))\". This is to match the converted rule lists, so
+they can be easily combined."
   :group 'segment-regexes
+  ;; TODO: fix defcustom custom rules type structure
   :type 'alist)
 
 ;;; Converted files:
