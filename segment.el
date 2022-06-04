@@ -108,11 +108,18 @@ your desired language does not appear, customize
               (car x))
             rulesets)))
 
+(defun segment--get-ruleset-by-lang (language converted-file-set)
+  "Get ruleset for LANGUAGE from CONVERTED-FILE-SET."
+  (dolist (x converted-file-set)
+    (when (equal language
+                 (car x))
+      (cl-return x))))
+
 (defun segment--get-lang-ruleset-from-file (language file)
   "Return ruleset for LANGUAGE from converted rulesets FILE.
 Language is a string, like \"English\"."
   (cadr
-   (segment-convert--get-ruleset-by-lang
+   (segment--get-ruleset-by-lang
     language
     (with-temp-buffer
       (insert-file-contents file)

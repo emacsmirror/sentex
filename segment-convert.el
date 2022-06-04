@@ -247,13 +247,6 @@ regex, and a :break flag of either nil or t."
                            t)))
           ruleset))
 
-(defun segment-convert--get-ruleset-by-lang (language converted-file-set)
-  "Get ruleset for LANGUAGE from CONVERTED-FILE-SET."
-  (dolist (x converted-file-set)
-    (when (equal language
-                 (car x))
-      (cl-return x))))
-
 
 (provide 'segment-convert)
 ;;; segment-convert.el ends here
