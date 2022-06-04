@@ -32,7 +32,7 @@
 (require 'xml)
 (require 'pcre2el)
 
-;; instead of structs, just build a keyword plist like:
+;; TODO: instead of structs, just build a keyword plist like:
 ;; '(:break nil :before-break x :after-break y)
 
 (defvar segment-convert-icu-omegat-regex-list
@@ -49,36 +49,6 @@
 
 ;; ICU regexes support look-aheads, Elisp doesn't:
 ;; look out for (?= ...), (?! ...), (?<= ...), (?<! ...)
-;; conversion from ICU to emacs regex:
-(defvar segment-convert-icu-regex-conversion-alist
-  '(
-    ;; ("\\." "\\\\.")
-    ;; ("\\b" "\\\\b")
-    ;; ("\b" "\\b")
-    ("(" "\\(")
-    ("\\s" "[[:space:]]")
-    (")" "\\)")
-    ("|" "\\|")
-    ("\\d" "[[:digit:]]")
-    ;; capitals are negations \p{Lu} is upper \P{Lu} is not upper
-    ("\\p{Lu}" "[[:upper:]]")
-    ("\\p{Ll}" "[[:lower:]]")
-    ("\\P{Ll}" "[^[:lower:]]")
-    ("\\P{Lu}" "[^[:upper:]]")
-    ;; ("\\P{Lu}" "[[:lower:]]") ; wrong
-    ;; ("(?i)" "") ; (case-fold-search t) ; elisp regexes ignore case by default
-    ("\\(?i\\)" "") ; (case-fold-search t) ; elisp regexes ignore case by default
-    ("\\p{Ps}" "[[({]") ; any opening bracket
-    ("\\p{pe}" "[])}]") ; any closing bracket
-    ("\\p{L}" "[[:alpha:]]") ; any letter in any language
-    ("\\p{N}" "[[:digit:]]")
-    ;; FIXME: \p{Po}: any kind of punctuation character that is not a dash, bracket, quote or connector.
-    ("\\p{Po}" "[^][(){}\"_-]")
-    ;; ("{X,Y}" "\\{X,Y\\}") ; need match groups to convert this? or just:
-    ("{" "\\{")
-    ("}" "\\}"))
-  "An (in-progress) alist of ICU regex elements and their elisp equivalents.")
-
 (defvar segment-convert-icu-regex-conversion-alist-unicode-only
   '(
     ;; capitals are negations \p{Lu} is upper \P{Lu} is not upper
@@ -86,7 +56,7 @@
     ("\\p{Ll}" "[[:lower:]]")
     ("\\P{Ll}" "[^[:lower:]]")
     ("\\P{Lu}" "[^[:upper:]]")
-    ("\\p{Lo}" "") ; FIXME: letter that doesn't have upper/lower variants
+    ("\\p{Lo}" "") ; FIXME: letter that doesn't have upper/lower variants [russian]
     ("\\p{Lt}" "[[:upper:]]\\{1\\}[[:lower:]]+") ; title case word
     ("\\(?i\\)" "") ; (case-fold-search t) ; elisp regexes ignore case by default
     ("\\p{Ps}" "[[({]") ; any opening bracket
@@ -102,10 +72,12 @@
 
 (defvar segment-convert-converted-rulesets-file nil)
 
-(cl-defstruct (segment-convert-ruleset (:constructor segment-convert-ruleset-create))
+(cl-defstruct (segment-convert-ruleset
+               (:constructor segment-convert-ruleset-create))
   language-rule-name rules)
 
-(cl-defstruct (segment-convert-rule (:constructor segment-convert-rule-create))
+(cl-defstruct (segment-convert-rule
+               (:constructor segment-convert-rule-create))
   break before-break after-break)
 
 ;;; parsing SRX files into cl-structs
@@ -143,6 +115,7 @@
              :after-break (dom-text (dom-by-tag x 'afterbreak))))
           (dom-by-tag dom 'rule)))
 
+;; used in scrapbook
 (defun segment-convert--get-ruleset-languages (srx-file)
   "Return a list of the languages of the rulesets in SRX-FILE."
   (let ((segment-omegat-rulesets
@@ -151,46 +124,13 @@
               (segment-convert-ruleset-language-rule-name ruleset))
             segment-omegat-rulesets)))
 
-;;; converting the regexes in our structs from ICU to elisp
-(defun segment-convert--convert-srx-file-to-elisp (srx-file)
-  "Convert SRX-FILE of segmentation rules to elisp regexes.
-Conversion is done against `segment-convert-icu-regex-conversion-alist'."
-  (mapcar (lambda (x)
-            (segment-convert--convert-icu-ruleset-to-elisp x))
-          (segment-convert--get-rulesets-from-file srx-file)))
-
-(defun segment-convert--convert-icu-ruleset-to-elisp (ruleset)
-  "Convert a single language RULESET to elisp regexes.
-Updates the structs with the converted regex strings."
-  (let ((rules (segment-convert-ruleset-rules ruleset)))
-    (mapc (lambda (x)
-            (setf (segment-convert-rule-before-break x)
-                  (segment-convert--convert-icu-rule x))
-            (setf (segment-convert-rule-after-break x)
-                  (segment-convert--convert-icu-rule x :after)))
-          rules)))
-
-(defun segment-convert--convert-icu-rule (rule &optional after)
-  "Convert single segmentation RULE to elisp regex.
-By default, it is a before rule, with arg AFTER, it's an after one."
-  (let ((rule-string (if after
-                         (segment-convert-rule-after-break rule)
-                       (segment-convert-rule-before-break rule))))
-    (unless (equal "" rule-string)
-      (with-temp-buffer
-        (erase-buffer)
-        (insert rule-string)
-        (mapc (lambda (x)
-                (segment-convert--replace-icu-regex-in-string x))
-              segment-convert-icu-regex-conversion-alist)
-        (buffer-string)))))
-
 ;;; use `pcre2el' to convert:
 ;;; converting the regexes in our structs from ICU to elisp
 (defun segment-convert--convert-srx-file-to-elisp-pcre2el (srx-file)
   "Convert SRX-FILE of segmentation rules to elisp regexes."
   (mapcar (lambda (x)
             (list
+             ;; lang name from struct:
              (segment-convert-ruleset-language-rule-name x)
              (segment-convert--convert-icu-ruleset-to-elisp-pcre2el x)))
           (segment-convert--get-rulesets-from-file srx-file)))
@@ -232,20 +172,6 @@ By default, it is a before rule, with arg AFTER, it's an after one."
   (goto-char (point-min))
   (while (search-forward (car regex-pair) nil t)
     (replace-match (cadr regex-pair) nil t)))
-
-;; build lists from conv struct:
-;; map over all langs in segment-convert-converted-full-file-set
-(defun segment-convert--build-regex-list-from-ruleset-struct (ruleset)
-  "Return a rule list for each rule in RULESET.
-A rule list consists in a before-break regex, an after-break
-regex, and a :break flag of either nil or t."
-  (mapcar (lambda (rule)
-            (list (segment-convert-rule-before-break rule)
-                  (segment-convert-rule-after-break rule)
-                  :break (if (equal (segment-convert-rule-break rule) "no")
-                             nil
-                           t)))
-          ruleset))
 
 
 (provide 'segment-convert)
