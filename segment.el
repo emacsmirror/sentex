@@ -228,30 +228,47 @@ With ARG, kill that many more sentences."
 (defun segment--looking-back-forward-map (language &optional moving-backward)
   "Return non-nil if we are at a non-break rule for LANGUAGE.
 MOVING-BACKWARD modifies the check for when we have moved backwards."
-  (let ((case-fold-search nil)
-        (regex-alist (segment--build-rule-list language)))
-    (cl-dolist (reg-pair regex-alist)
-      (when (and (looking-back
-                  ;; before-break regex
-                  (if moving-backward
-                      ;; we are after any whitespace
-                      (concat (car reg-pair)
-                              "[[:blank:]]*")
-                    (car reg-pair))
-                  ;; limit arg:
-                  (save-excursion (backward-word 2)
-                                  (point)))
-                 ;; after-break regex:
-                 (if moving-backward
-                     ;; we are after any whitespace:
-                     (save-excursion
-                       (forward-whitespace -1) ; back over whitespace
-                       (looking-at (cadr reg-pair)))
-                   (looking-at (cadr reg-pair)))
-                 ;; only when we hit nil break rules
-                 (not (plist-get reg-pair :break)))
-        (cl-return reg-pair)))))
+  (let* ((case-fold-search nil)
+         (regex-alist (segment--build-rule-list language))
+         ;; TODO: test for yes break rules first, and stop if match. then test
+         ;; no-break rules
+         (break-rules (segment--get-breaking-rules regex-alist)))
+    (unless
+        (segment--test-rule-pairs break-rules moving-backward)
+      (segment--test-rule-pairs regex-alist moving-backward))))
 
+(defun segment--get-breaking-rules (regex-alist)
+  ""
+  (remove nil
+          (mapcar (lambda (x)
+                    (when (plist-get x :break)
+                      x))
+                  regex-alist)))
+
+(defun segment--test-rule-pairs (regex-alist &optional moving-backward)
+  "Return non-nil when when point is surrounded by an element in REGEX-ALIST."
+  (cl-dolist (reg-pair regex-alist)
+    (when (and
+           (looking-back
+            ;; before-break regex
+            (if moving-backward
+                ;; we are after any whitespace
+                (concat (car reg-pair)
+                        "[[:blank:]]*")
+              (car reg-pair))
+            ;; limit arg:
+            (save-excursion (backward-word 2)
+                            (point)))
+           ;; after-break regex:
+           (if moving-backward
+               ;; we are after any whitespace:
+               (save-excursion
+                 (forward-whitespace -1) ; back over whitespace
+                 (looking-at (cadr reg-pair)))
+             (looking-at (cadr reg-pair)))
+           ;; only when we hit nil break rules
+           (not (plist-get reg-pair :break)))
+      (cl-return reg-pair))))
 
 (provide 'segment)
 ;;; segment.el ends here
