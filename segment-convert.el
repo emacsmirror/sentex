@@ -152,10 +152,11 @@ Returns a nested list of the rules."
 (defun segment-convert--convert-icu-rule-pcre2el (rule &optional after)
   "Convert single segmentation RULE to elisp regex.
 By default, it is a before rule, with arg AFTER, it's an after one."
-  (let ((rule-string (if after
-                         (segment-convert-rule-after-break rule)
-                       (segment-convert-rule-before-break rule))))
-    (unless (equal "" rule-string)
+  (let* ((rule-string (if after
+                          (segment-convert-rule-after-break rule)
+                        (segment-convert-rule-before-break rule))))
+    (if (equal "" rule-string)
+        ""
       ;; first try our incomplete unicode properties conversion
       ;; which pcre2el can't handle:
       (with-temp-buffer
