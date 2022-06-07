@@ -99,11 +99,8 @@ This can be changed on a per-buffer basis by calling
 `segment-set-language-for-buffer'. Note that different frameworks
 support different languages. Run `segment-get-valid-langs' to see
 what languages the current framework supports.")
-;; works but doesn't update when `segment-ruleset-framework' is changed:
-;; causes all kinds of problems
-;; :type (segment-map-langs-for-customize))
 
-;; (add-variable-watcher 'segment-current-language 'segment--update-current-ruleset)
+(add-variable-watcher 'segment-current-language 'segment--update-current-ruleset)
 
 (defvar segment-current-ruleset nil
   "The current ruleset to use.
