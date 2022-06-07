@@ -50,19 +50,17 @@
 
 (add-variable-watcher 'segment-ruleset-framework 'segment--update-current-ruleset)
 
-(defcustom segment-current-language "English"
+(defvar segment-current-language "English"
   "The language for which the segmentation rules are to be used.
 This can be changed on a per-buffer basis by calling
 `segment-set-language-for-buffer'. Note that different frameworks
 support different languages. Run `segment-get-valid-langs' to see
-what languages the current framework supports. "
-  :group 'segment
-  :type 'string)
+what languages the current framework supports.")
 ;; works but doesn't update when `segment-ruleset-framework' is changed:
 ;; causes all kinds of problems
 ;; :type (segment-map-langs-for-customize))
 
-(add-variable-watcher 'segment-current-language 'segment--update-current-ruleset)
+;; (add-variable-watcher 'segment-current-language 'segment--update-current-ruleset)
 
 (defcustom segment-custom-rules-regex-list
   '(("English"
