@@ -57,9 +57,10 @@ This can be changed on a per-buffer basis by calling
 support different languages. Run `segment-get-valid-langs' to see
 what languages the current framework supports. "
   :group 'segment
-  ;; :type 'string)
-  ;; works but doesn't update when `segment-ruleset-framework' is changed:
-  :type (segment-map-langs-for-customize))
+  :type 'string)
+;; works but doesn't update when `segment-ruleset-framework' is changed:
+;; causes all kinds of problems
+;; :type (segment-map-langs-for-customize))
 
 (add-variable-watcher 'segment-current-language 'segment--update-current-ruleset)
 
@@ -122,13 +123,13 @@ they can be easily combined."
 (defvar segment-okapi-alt-file
   (concat segment-directory "segment-okapi-alt-rules-converted.el"))
 
-(defun segment-map-langs-for-customize ()
-  "Used by `segment-current-language' customize."
-  (let ((langs (segment-get-valid-langs)))
-    (append '(choice)
-            (mapcar (lambda (x)
-                      `(const ,x))
-                    langs))))
+;; (defun segment-map-langs-for-customize ()
+;;   "Used by `segment-current-language' customize."
+;;   (let ((langs (segment-get-valid-langs)))
+;;     (append '(choice)
+;;             (mapcar (lambda (x)
+;;                       `(const ,x))
+;;                     langs))))
 
 (defun segment-get-valid-langs ()
   "Return the list of languages supported by `segment-current-language'."
