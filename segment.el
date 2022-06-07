@@ -29,7 +29,8 @@
 ;; `segment-kill-sentence'.
 
 ;; Customize `segment-ruleset-framework' to select which framework to use.
-;; Set `segment-current-language' to choose what language's rules to use.
+;; Call `segment-set-language-for-buffer', or set `segment-current-language'
+;; to choose what language's rules to use.
 
 ;;; Code:
 
@@ -146,7 +147,7 @@ by a framework.
          segment-okapi-alt-file)))
 
 (defun segment-get-valid-langs ()
-  "Return the list of languages supported by `segment-current-language'."
+  "Return the list of languages supported by `segment-ruleset-framework'."
   (interactive)
   (segment--get-langs-from-file (segment--current-framework-file)))
 
@@ -206,7 +207,7 @@ Add any additional rules to the converted rulesets."
 (defun segment--update-current-ruleset (symbol newval operation where)
   "Update `segment-current-ruleset' as needed.
 \nThis is a variable watcher function for
-`segment-ruleset-framework' and `segment-current-language'."
+`segment-ruleset-framework'."
   (set-default symbol newval)
   (segment--build-rule-list))
 
