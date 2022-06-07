@@ -1,7 +1,7 @@
 (("English"
   (("\\b\\(\\(?:Brig\\|C\\(?:apt\\|mnd\\|ol\\)\\|Dr\\|Gen\\|Hon\\|Ibid\\|M\\(?:aj\\|rs\\|[rs]\\)\\|Pr\\(?:es\\)?\\|Re\\(?:vd\\|[pv]\\)\\|S\\(?:en\\|g?t\\)\\|comp\\)\\)\\." "[[:space:]]" :break nil)
    ("[!?][])]" "[[:space:]]*[[:alpha:]]" :break nil)
-   ("^\\([.0-9]+\\|[.ivx]+\\|[.a-z]+\\)" nil :break nil)
+   ("^\\([.0-9]+\\|[.ivx]+\\|[.a-z]+\\)" "" :break nil)
    ("[!.?]" "[[:space:]]+\\([AI]\\|At\\|Being\\|Did\\|For\\|He\\|How\\|However\\|In\\|It\\|Millions\\|More\\|Not\\|She\\|That\\|The\\|There\\|They\\|We\\|What\\|When\\|Where\\|Who\\|Why\\)[[:space:]]" :break t)
    ("\\(?:\\([Hh][Tt][Tt][Pp][Ss]?\\|[Ff][Tt][Pp]\\)://[^[[:space:]]/$\\).?#].[^[[:space:]]]*\\?" "[^[[:space:]]]+" :break nil)
    ("\\b[Aa][Bb][Ss]\\." "[[:space:]]" :break nil)
