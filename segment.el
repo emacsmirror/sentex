@@ -30,7 +30,9 @@
 
 ;; Customize `segment-ruleset-framework' to select which framework to use.
 ;; Call `segment-set-language-for-buffer', or set `segment-current-language'
-;; to choose what language's rules to use.
+;; to choose what language's rules to use. Different frameworks support
+;; different languages, so if your language doesn't appear in the options, try
+;; using a different one.
 
 ;;; Code:
 
@@ -95,10 +97,9 @@ they can be easily combined."
 
 (defvar segment-current-language "English"
   "The language for which the segmentation rules are to be used.
-This can be changed on a per-buffer basis by calling
-`segment-set-language-for-buffer'. Note that different frameworks
-support different languages. Run `segment-get-valid-langs' to see
-what languages the current framework supports.")
+\nThis variable should be set by running
+`segment-set-current-language'. Note that different frameworks
+support different languages.")
 
 (add-variable-watcher 'segment-current-language 'segment--update-current-ruleset)
 
@@ -204,10 +205,11 @@ Add any additional rules to the converted rulesets."
   (setq segment-current-break-rules
         (segment--get-breaking-rules segment-current-ruleset)))
 
-(defun segment--update-current-ruleset (symbol newval operation where)
+(defun segment--update-current-ruleset (symbol newval _operation _where)
   "Update `segment-current-ruleset' as needed.
 \nThis is a variable watcher function for
-`segment-ruleset-framework'."
+`segment-ruleset-framework'.
+Args SYMBOL NEWVAL OPERATION and WHERE are required by it."
   (set-default symbol newval)
   (segment--build-rule-list))
 
@@ -258,7 +260,7 @@ MOVING-BACKWARD modifies the check for when we have moved backwards."
 ;; :non-break)))
 
 (defun segment--get-breaking-rules (regex-alist)
-  ""
+  "Collect the rules that mandate sentence breaks in REGEX-ALIST."
   (remove nil
           (mapcar (lambda (x)
                     (when (plist-get x :break)
@@ -266,7 +268,8 @@ MOVING-BACKWARD modifies the check for when we have moved backwards."
                   regex-alist)))
 
 (defun segment--test-rule-pairs (regex-alist &optional moving-backward)
-  "Return non-nil when when point is surrounded by an element in REGEX-ALIST."
+  "Return non-nil when when point is surrounded by an element in REGEX-ALIST.
+MOVING-BACKWARD makes adjustments based on where `backward-sentence' places point."
   (cl-dolist (reg-pair regex-alist)
     (when (and
            ;; FIXME: performance of this is terrible
