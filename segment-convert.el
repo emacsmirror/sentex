@@ -174,6 +174,23 @@ By default, it is a before rule, with arg AFTER, it's an after one."
   (while (search-forward (car regex-pair) nil t)
     (replace-match (cadr regex-pair) nil t)))
 
+(defun segment-convert--convert-and-write-to-file (srx-file)
+  "Convert SRX-FILE and save to disk."
+  (with-temp-file (concat segment-directory
+                          "segment-"
+                          (cond ((equal srx-file segment-convert-icu-okapi-alt-regex-list)
+                                 "okapi-alt")
+                                ((equal srx-file segment-convert-icu-icu4j-regex-list)
+                                 "icu4j")
+                                ((equal srx-file segment-convert-icu-omegat-regex-list)
+                                 "omegat"))
+                          "-rules-converted.el")
+    (let ((print-length nil)
+          (standard-output (current-buffer)))
+      (prin1 (segment-convert--convert-srx-file-to-elisp-pcre2el
+              srx-file))
+      (pp-buffer))))
+
 
 (provide 'segment-convert)
 ;;; segment-convert.el ends here
