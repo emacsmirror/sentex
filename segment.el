@@ -50,18 +50,6 @@
 
 (add-variable-watcher 'segment-ruleset-framework 'segment--update-current-ruleset)
 
-(defvar segment-current-language "English"
-  "The language for which the segmentation rules are to be used.
-This can be changed on a per-buffer basis by calling
-`segment-set-language-for-buffer'. Note that different frameworks
-support different languages. Run `segment-get-valid-langs' to see
-what languages the current framework supports.")
-;; works but doesn't update when `segment-ruleset-framework' is changed:
-;; causes all kinds of problems
-;; :type (segment-map-langs-for-customize))
-
-;; (add-variable-watcher 'segment-current-language 'segment--update-current-ruleset)
-
 (defcustom segment-custom-rules-regex-list
   '(("English"
      ;; Sr. / Jr. can end a sentence
@@ -104,9 +92,22 @@ they can be easily combined."
                                           (const :break)
                                           (boolean :tag "break-value"))))))
 
+(defvar segment-current-language "English"
+  "The language for which the segmentation rules are to be used.
+This can be changed on a per-buffer basis by calling
+`segment-set-language-for-buffer'. Note that different frameworks
+support different languages. Run `segment-get-valid-langs' to see
+what languages the current framework supports.")
+;; works but doesn't update when `segment-ruleset-framework' is changed:
+;; causes all kinds of problems
+;; :type (segment-map-langs-for-customize))
+
+;; (add-variable-watcher 'segment-current-language 'segment--update-current-ruleset)
+
 (defvar segment-current-ruleset nil
   "The current ruleset to use.
-\nA ruleset is a set of rules for a given language as specified by a framework.
+\nA ruleset is a set of rules for a given language as specified
+by a framework.
 \nThis is created by `segment--build-rule-list'.")
 
 (defvar segment-current-break-rules nil)
@@ -121,49 +122,7 @@ they can be easily combined."
 (defvar segment-okapi-alt-file
   (concat segment-directory "segment-okapi-alt-rules-converted.el"))
 
-;; (defun segment-map-langs-for-customize ()
-;;   "Used by `segment-current-language' customize."
-;;   (let ((langs (segment-get-valid-langs)))
-;;     (append '(choice)
-;;             (mapcar (lambda (x)
-;;                       `(const ,x))
-;;                     langs))))
-
-(defun segment-get-valid-langs ()
-  "Return the list of languages supported by `segment-current-language'."
-  (interactive)
-  (segment--get-langs-from-file (segment--current-framework-file)))
-
-(defun segment--current-framework-file ()
-  "Return the current ruleset file given `segment-ruleset-framework'."
-  (cond ((equal segment-ruleset-framework 'omegat)
-         segment-omegat-file)
-        ((equal segment-ruleset-framework 'icu4j)
-         segment-icu4j-file)
-        ((equal segment-ruleset-framework 'okapi-alt)
-         segment-okapi-alt-file)))
-
-(defun segment-set-language-for-buffer ()
-  "Set the language ruleset to use for current buffer, using completion.
-Note that different frameworks support different languages, so if
-your desired language does not appear, customize
-`segment-ruleset-framework' and try again.
-\nRuns `segment--build-rule-list' which sets `segment-current-ruleset'."
-  (interactive)
-  (let* ((langs
-          (segment--get-langs-from-file (segment--current-framework-file)))
-         (lang-choice
-          (completing-read
-           (format "Set segment.el language for current buffer (%s): "
-                   segment-ruleset-framework)
-           langs
-           nil t)))
-    (setq-local segment-current-language lang-choice)
-    (segment--build-rule-list)
-    (message "Using %s %s rules for current buffer."
-             segment-ruleset-framework
-             lang-choice)))
-
+;;; getting and setting language:
 (defun segment--read-file (file)
   "Read FILE."
   (with-temp-buffer
@@ -177,6 +136,41 @@ your desired language does not appear, customize
               (car x))
             rulesets)))
 
+(defun segment--current-framework-file ()
+  "Return the current ruleset file given `segment-ruleset-framework'."
+  (cond ((equal segment-ruleset-framework 'omegat)
+         segment-omegat-file)
+        ((equal segment-ruleset-framework 'icu4j)
+         segment-icu4j-file)
+        ((equal segment-ruleset-framework 'okapi-alt)
+         segment-okapi-alt-file)))
+
+(defun segment-get-valid-langs ()
+  "Return the list of languages supported by `segment-current-language'."
+  (interactive)
+  (segment--get-langs-from-file (segment--current-framework-file)))
+
+(defun segment-set-language-for-buffer ()
+  "Set the language ruleset to use for current buffer, using completion.
+Note that different frameworks support different languages, so if
+your desired language does not appear, customize
+`segment-ruleset-framework' and try again.
+\nRuns `segment--build-rule-list' which sets `segment-current-ruleset'."
+  (interactive)
+  (let* ((langs (segment-get-valid-langs))
+         (lang-choice
+          (completing-read
+           (format "Set segment.el language for current buffer (%s): "
+                   segment-ruleset-framework)
+           langs
+           nil t)))
+    (setq-local segment-current-language lang-choice)
+    (segment--build-rule-list)
+    (message "Using %s %s rules for current buffer."
+             segment-ruleset-framework
+             lang-choice)))
+
+;;; building current ruleset:
 (defun segment--get-ruleset-by-lang (language converted-file-set)
   "Get ruleset for LANGUAGE from CONVERTED-FILE-SET."
   (dolist (x converted-file-set)
@@ -216,7 +210,7 @@ Add any additional rules to the converted rulesets."
   (set-default symbol newval)
   (segment--build-rule-list))
 
-;; roll our own movement cmds:
+;;; roll our own movement cmds:
 ;;;###autoload
 (defun segment-forward-sentence (&optional arg)
   "Call `forward-sentence' ARG number of times.
