@@ -48,6 +48,8 @@
                  (const :tag "OmegaT" omegat)
                  (const :tag "Okapi alternative" okapi-alt)))
 
+(add-variable-watcher 'segment-ruleset-framework 'segment--update-current-ruleset)
+
 (defcustom segment-current-language "English"
   "The language for which the segmentation rules are to be used.
 This can be changed on a per-buffer basis by calling
@@ -58,6 +60,8 @@ what languages the current framework supports. "
   ;; :type 'string)
   ;; works but doesn't update when `segment-ruleset-framework' is changed:
   :type (segment-map-langs-for-customize))
+
+(add-variable-watcher 'segment-current-language 'segment--update-current-ruleset)
 
 (defcustom segment-custom-rules-regex-list
   '(("English"
@@ -100,6 +104,13 @@ they can be easily combined."
                                           (string :tag "after-break")
                                           (const :break)
                                           (boolean :tag "break-value"))))))
+
+(defvar segment-current-ruleset nil
+  "The current ruleset to use.
+\nA ruleset is a set of rules for a given language as specified by a framework.
+\nThis is created by `segment--build-rule-list'.")
+
+(defvar segment-current-break-rules nil)
 
 ;;; Converted files:
 (defvar segment-directory
@@ -148,6 +159,7 @@ your desired language does not appear, customize
            langs
            nil t)))
     (setq-local segment-current-language lang-choice)
+    (segment--build-rule-list)
     (message "Using %s rules for current buffer." lang-choice)))
 
 (defun segment--read-file (file)
@@ -186,11 +198,21 @@ Language is a string, like \"English\"."
 (defun segment--build-rule-list (&optional language)
   "Build ruleset list for LANGUAGE.
 Add any additional rules to the converted rulesets."
-  (append
-   (segment--get-lang-ruleset-from-file
-    (or language segment-current-language)
-    (segment--current-framework-file))
-   (segment--get-custom-rules language)))
+  (setq segment-current-ruleset
+        (append
+         (reverse (segment--get-lang-ruleset-from-file
+                   (or language segment-current-language)
+                   (segment--current-framework-file)))
+         (segment--get-custom-rules (or language segment-current-language))))
+  (setq segment-current-break-rules
+        (segment--get-breaking-rules segment-current-ruleset)))
+
+(defun segment--update-current-ruleset (symbol newval operation where)
+  "Update `segment-current-ruleset' as needed.
+\nThis is a variable watcher function for
+`segment-ruleset-framework' and `segment-current-language'."
+  (set-default symbol newval)
+  (segment--build-rule-list))
 
 ;; roll our own movement cmds:
 ;;;###autoload
@@ -229,13 +251,14 @@ With ARG, kill that many more sentences."
   "Return non-nil if we are at a non-break rule for LANGUAGE.
 MOVING-BACKWARD modifies the check for when we have moved backwards."
   (let* ((case-fold-search nil)
-         (regex-alist (segment--build-rule-list language))
-         ;; TODO: test for yes break rules first, and stop if match. then test
-         ;; no-break rules
-         (break-rules (segment--get-breaking-rules regex-alist)))
-    (unless
-        (segment--test-rule-pairs break-rules moving-backward)
-      (segment--test-rule-pairs regex-alist moving-backward))))
+         (regex-alist segment-current-ruleset)
+         (break-rules segment-current-break-rules))
+    ;; break rules first?:
+    ;; only check for non-break rules if no break rule matched:
+    ;; (unless
+    ;; (segment--test-rule-pairs break-rules moving-backward)
+    (segment--test-rule-pairs regex-alist moving-backward)))
+;; :non-break)))
 
 (defun segment--get-breaking-rules (regex-alist)
   ""
@@ -249,6 +272,7 @@ MOVING-BACKWARD modifies the check for when we have moved backwards."
   "Return non-nil when when point is surrounded by an element in REGEX-ALIST."
   (cl-dolist (reg-pair regex-alist)
     (when (and
+           ;; FIXME: performance of this is terrible
            (looking-back
             ;; before-break regex
             (if moving-backward
