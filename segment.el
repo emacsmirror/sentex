@@ -148,9 +148,10 @@ by a framework.
   (interactive)
   (segment--get-langs-from-file (segment--current-framework-file)))
 
-(defun segment-set-language-for-buffer ()
-  "Set the language ruleset to use for current buffer, using completion.
-Note that different frameworks support different languages, so if
+(defun segment-set-current-language (&optional local)
+  "Set the language ruleset to use, using completion.
+With arg LOCAL, make the setting buffer-local.
+\nNote that different frameworks support different languages, so if
 your desired language does not appear, customize
 `segment-ruleset-framework' and try again.
 \nRuns `segment--build-rule-list' which sets `segment-current-ruleset'."
@@ -162,7 +163,9 @@ your desired language does not appear, customize
                    segment-ruleset-framework)
            langs
            nil t)))
-    (setq-local segment-current-language lang-choice)
+    (if local
+        (setq-local segment-current-language lang-choice)
+      (setq segment-current-language lang-choice))
     (segment--build-rule-list)
     (message "Using %s %s rules for current buffer."
              segment-ruleset-framework
