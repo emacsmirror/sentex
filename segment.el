@@ -147,7 +147,8 @@ they can be easily combined."
   "Set the language ruleset to use for current buffer, using completion.
 Note that different frameworks support different languages, so if
 your desired language does not appear, customize
-`segment-ruleset-framework' and try again."
+`segment-ruleset-framework' and try again.
+\nRuns `segment--build-rule-list' which sets `segment-current-ruleset'."
   (interactive)
   (let* ((langs
           (segment--get-langs-from-file (segment--current-framework-file)))
