@@ -161,7 +161,9 @@ your desired language does not appear, customize
            nil t)))
     (setq-local segment-current-language lang-choice)
     (segment--build-rule-list)
-    (message "Using %s rules for current buffer." lang-choice)))
+    (message "Using %s %s rules for current buffer."
+             segment-ruleset-framework
+             lang-choice)))
 
 (defun segment--read-file (file)
   "Read FILE."
