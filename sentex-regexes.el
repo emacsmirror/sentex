@@ -1,9 +1,9 @@
-;;; segment-regexes.el --- Regexes for sentence segmentation rules  -*- lexical-binding: t; -*-
+;;; sentex-regexes.el --- Regexes for sentence sentexation rules  -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2022 Marty Hiatt <martianhiatus AT riseup.net>
 ;; Author: Marty Hiatt <martianhiatus AT riseup.net>
 ;; Version: 0.2
-;; URL: https://codeberg.org/martianh/segment
+;; URL: https://codeberg.org/martianh/sentex
 ;; Package-Requires: ((emacs "27.1"))
 ;; Keywords: languages, convenience, translation, sentences, text
 
@@ -37,14 +37,14 @@
 
 ;; NB: after-break rules must always be provided
 
-(require 'segment-convert)
+(require 'sentex-convert)
 
-(defvar segment-regexes-en-list nil
+(defvar sentex-regexes-en-list nil
   "Holds the composite list of en regexes.
-\nRun `segment-regexes-construct-en-list' to obtain the overall value.")
+\nRun `sentex-regexes-construct-en-list' to obtain the overall value.")
 
 ;;; EN by hand:
-(defconst segment-regexes-omegat-en-list
+(defconst sentex-regexes-omegat-en-list
   '(
     ;; Omega defaultRules.srx (English):
     
@@ -204,9 +204,9 @@
     ;; </languagerule>
     ))
 
-(defconst segment-regexes-okapi-en-list
+(defconst sentex-regexes-okapi-en-list
   '(
-;;; Okapi defaultSegmentation.srx
+;;; Okapi defaultSentexation.srx
     ;; default lang
     
     ("\\b\\(pp?\\|\"e\\.?[[:space:]]*g\\|i\\.?[[:space:]]*e\\|no\\|[Vv]ol\\|[Rr]col\\|maj\\|Lt\\|[Ff]ig\\|[Ff]igs\\|[Vv]iz\\|[Vv]ols\\|[Aa]pprox\\|[Ii]ncl\\|Pres\\|Prof\\|[Dd]ept\\|min\\|max\\|[Gg]ovt\\|c\\.?[[:space:]]*f\\|[Vv]\\.?[[space:]]\\)\\."
@@ -482,9 +482,9 @@
     ;; </languagerule>
     ))
 
-(defcustom segment-regexes-additional-en-list
+(defcustom sentex-regexes-additional-en-list
   '(
-    ;;; segment.el additions
+    ;;; sentex.el additions
 
     ;; Sr. / Jr. can end a sentence
     ;; a single title addition from okapi above (otherwise we are using omegat)
@@ -512,26 +512,26 @@
      "[[:space:]][[:digit:]]" :break nil))
   "Additional regexes of before break / after break rules.
 Used for ending or not ending sentences."
-  :group 'segment-regexes
+  :group 'sentex-regexes
   :type 'plist)
 
 ;; TODO make construct-list language-generic
-(defun segment-regexes--construct-en-list ()
+(defun sentex-regexes--construct-en-list ()
   "Return the full collection of regex rules for English."
-  (setq segment-regexes-en-list
+  (setq sentex-regexes-en-list
         ;; TODO: work out correct order
         (append
-         segment-regexes-additional-en-list
-         (cond ((eq segment-ruleset-framework 'omegat)
-                segment-regexes-omegat-en-list)
-               ((eq segment-ruleset-framework 'okapi)
-                segment-regexes-okapi-en-list)
-               ((eq segment-ruleset-framework 'all)
-                segment-regexes-omegat-en-list
-                segment-regexes-okapi-en-list)))))
+         sentex-regexes-additional-en-list
+         (cond ((eq sentex-ruleset-framework 'omegat)
+                sentex-regexes-omegat-en-list)
+               ((eq sentex-ruleset-framework 'okapi)
+                sentex-regexes-okapi-en-list)
+               ((eq sentex-ruleset-framework 'all)
+                sentex-regexes-omegat-en-list
+                sentex-regexes-okapi-en-list)))))
 
 ;;; omegat French rules by hand:
-(defconst segment-regexes-omegat-fr-list
+(defconst sentex-regexes-omegat-fr-list
   '(
     ;; <languagerule languagerulename="French">
 
@@ -730,12 +730,12 @@ Used for ending or not ending sentences."
     ;; </languagerule>
     ))
 
-(defvar segment-regexes-fr-list nil)
+(defvar sentex-regexes-fr-list nil)
 
-(defun segment-regexes--construct-fr-list ()
+(defun sentex-regexes--construct-fr-list ()
   "Return the full collection of regex rules for French."
-  (setq segment-regexes-fr-list
-        segment-regexes-omegat-fr-list))
+  (setq sentex-regexes-fr-list
+        sentex-regexes-omegat-fr-list))
 
-(provide 'segment-regexes)
-;;; segment-regexes.el ends here
+(provide 'sentex-regexes)
+;;; sentex-regexes.el ends here

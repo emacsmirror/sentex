@@ -1,9 +1,9 @@
-;;; segment.el --- Regexes for sentence segmentation rules  -*- lexical-binding: t; -*-
+;;; sentex.el --- Regexes for sentence segmentation rules  -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2022 Marty Hiatt <martianhiatus AT riseup.net>
 ;; Author: Marty Hiatt <martianhiatus AT riseup.net>
 ;; Version: 0.2
-;; URL: https://codeberg.org/martianh/segment
+;; URL: https://codeberg.org/martianh/sentex
 ;; Package-Requires: ((emacs "27.1"))
 ;; Keywords: languages, convenience, translation, sentences, text, wp
 
@@ -25,35 +25,35 @@
 ;; This package uses breaking and non-breaking sentence-ending rules ported
 ;; from OmegaT and Okapi Framework.
 
-;; It provides `segment-forward-sentence', `segment-backward-sentence', and
-;; `segment-kill-sentence'.
+;; It provides `sentex-forward-sentence', `sentex-backward-sentence', and
+;; `sentex-kill-sentence'.
 
-;; Customize `segment-ruleset-framework' to select which framework to use.
-;; Call `segment-set-language-for-buffer', or set `segment-current-language'
+;; Customize `sentex-ruleset-framework' to select which framework to use.
+;; Call `sentex-set-language-for-buffer', or set `sentex-current-language'
 ;; to choose what language's rules to use. Different frameworks support
 ;; different languages, so if your language doesn't appear in the options, try
 ;; using a different one.
 
 ;;; Code:
 
-(require 'segment-convert)
-(require 'segment-regexes)
+(require 'sentex-convert)
+(require 'sentex-regexes)
 (require 'xml)
 (require 'dom)
 
-(defgroup segment nil
-  "Sentence segmentation regexes."
+(defgroup sentex nil
+  "Sentence sentexation regexes."
   :group 'editing)
 
-(defcustom segment-ruleset-framework 'icu4j
+(defcustom sentex-ruleset-framework 'icu4j
   "Framework to use for break/non-break rulesets."
   :type '(choice (const :tag "ICU4J" icu4j)
                  (const :tag "OmegaT" omegat)
                  (const :tag "Okapi alternative" okapi-alt)))
 
-(add-variable-watcher 'segment-ruleset-framework 'segment--update-current-ruleset)
+(add-variable-watcher 'sentex-ruleset-framework 'sentex--update-current-ruleset)
 
-(defcustom segment-custom-rules-regex-list
+(defcustom sentex-custom-rules-regex-list
   '(("English"
      ;; Sr. / Jr. can end a sentence
      ;; a single title addition from okapi above (otherwise we are using omegat)
@@ -85,7 +85,7 @@ These additional rules are added to the converted rulesets.
 \"(\"LANGUAGE\" ((\"BEFORE-BREAK-RE\" \"AFTER-BREAK-RE\" :break
 BREAK-BOOLEAN))\". This is to match the converted rule lists, so
 they can be easily combined."
-  :group 'segment
+  :group 'sentex
   :type '(alist :key-type (string :tag "Language")
                 :value-type (list (alist :key-type
                                          (string :tag "before-break")
@@ -95,171 +95,171 @@ they can be easily combined."
                                           (const :break)
                                           (boolean :tag "break-value"))))))
 
-(defvar segment-current-language "English"
-  "The language for which the segmentation rules are to be used.
+(defvar sentex-current-language "English"
+  "The language for which the sentexation rules are to be used.
 \nThis variable should be set by running
-`segment-set-current-language'. Note that different frameworks
+`sentex-set-current-language'. Note that different frameworks
 support different languages.")
 
-(add-variable-watcher 'segment-current-language 'segment--update-current-ruleset)
+(add-variable-watcher 'sentex-current-language 'sentex--update-current-ruleset)
 
-(defvar segment-current-ruleset nil
+(defvar sentex-current-ruleset nil
   "The current ruleset to use.
 \nA ruleset is a set of rules for a given language as specified
 by a framework.
-\nThis is created by `segment--build-rule-list'.")
+\nThis is created by `sentex--build-rule-list'.")
 
-(defvar segment-current-break-rules nil)
+(defvar sentex-current-break-rules nil)
 
 ;;; Converted files:
-(defvar segment-directory
-  (file-name-directory (locate-library "segment")))
-(defvar segment-icu4j-file
-  (concat segment-directory "segment-icu4j-rules-converted.el"))
-(defvar segment-omegat-file
-  (concat segment-directory "segment-omegat-rules-converted.el"))
-(defvar segment-okapi-alt-file
-  (concat segment-directory "segment-okapi-alt-rules-converted.el"))
+(defvar sentex-directory
+  (file-name-directory (locate-library "sentex")))
+(defvar sentex-icu4j-file
+  (concat sentex-directory "sentex-icu4j-rules-converted.el"))
+(defvar sentex-omegat-file
+  (concat sentex-directory "sentex-omegat-rules-converted.el"))
+(defvar sentex-okapi-alt-file
+  (concat sentex-directory "sentex-okapi-alt-rules-converted.el"))
 
 ;;; getting and setting language:
-(defun segment--read-file (file)
+(defun sentex--read-file (file)
   "Read FILE."
   (with-temp-buffer
     (insert-file-contents file)
     (read (current-buffer))))
 
-(defun segment--get-langs-from-file (file)
+(defun sentex--get-langs-from-file (file)
   "Return the languages with rulesets in FILE."
-  (let ((rulesets (segment--read-file file)))
+  (let ((rulesets (sentex--read-file file)))
     (mapcar (lambda (x)
               (car x))
             rulesets)))
 
-(defun segment--current-framework-file ()
-  "Return the current ruleset file given `segment-ruleset-framework'."
-  (cond ((equal segment-ruleset-framework 'omegat)
-         segment-omegat-file)
-        ((equal segment-ruleset-framework 'icu4j)
-         segment-icu4j-file)
-        ((equal segment-ruleset-framework 'okapi-alt)
-         segment-okapi-alt-file)))
+(defun sentex--current-framework-file ()
+  "Return the current ruleset file given `sentex-ruleset-framework'."
+  (cond ((equal sentex-ruleset-framework 'omegat)
+         sentex-omegat-file)
+        ((equal sentex-ruleset-framework 'icu4j)
+         sentex-icu4j-file)
+        ((equal sentex-ruleset-framework 'okapi-alt)
+         sentex-okapi-alt-file)))
 
-(defun segment-get-valid-langs ()
-  "Return the list of languages supported by `segment-ruleset-framework'."
+(defun sentex-get-valid-langs ()
+  "Return the list of languages supported by `sentex-ruleset-framework'."
   (interactive)
-  (segment--get-langs-from-file (segment--current-framework-file)))
+  (sentex--get-langs-from-file (sentex--current-framework-file)))
 
-(defun segment-set-current-language (&optional local)
+(defun sentex-set-current-language (&optional local)
   "Set the language ruleset to use, using completion.
 With arg LOCAL, make the setting buffer-local.
 \nNote that different frameworks support different languages, so if
 your desired language does not appear, customize
-`segment-ruleset-framework' and try again.
-\nRuns `segment--build-rule-list' which sets `segment-current-ruleset'."
+`sentex-ruleset-framework' and try again.
+\nRuns `sentex--build-rule-list' which sets `sentex-current-ruleset'."
   (interactive)
-  (let* ((langs (segment-get-valid-langs))
+  (let* ((langs (sentex-get-valid-langs))
          (lang-choice
           (completing-read
-           (format "Set segment.el language for current buffer (%s): "
-                   segment-ruleset-framework)
+           (format "Set sentex.el language for current buffer (%s): "
+                   sentex-ruleset-framework)
            langs
            nil t)))
     (if local
-        (setq-local segment-current-language lang-choice)
-      (setq segment-current-language lang-choice))
-    (segment--build-rule-list)
+        (setq-local sentex-current-language lang-choice)
+      (setq sentex-current-language lang-choice))
+    (sentex--build-rule-list)
     (message "Using %s %s rules for current buffer."
-             segment-ruleset-framework
+             sentex-ruleset-framework
              lang-choice)))
 
 ;;; building current ruleset:
-(defun segment--get-ruleset-by-lang (language converted-file-set)
+(defun sentex--get-ruleset-by-lang (language converted-file-set)
   "Get ruleset for LANGUAGE from CONVERTED-FILE-SET."
   (dolist (x converted-file-set)
     (when (equal language
                  (car x))
       (cl-return x))))
 
-(defun segment--get-lang-ruleset-from-file (language file)
+(defun sentex--get-lang-ruleset-from-file (language file)
   "Return ruleset for LANGUAGE from converted rulesets FILE.
 Language is a string, like \"English\"."
   (cadr
-   (segment--get-ruleset-by-lang
+   (sentex--get-ruleset-by-lang
     language
-    (segment--read-file file))))
+    (sentex--read-file file))))
 
-(defun segment--get-custom-rules (language)
+(defun sentex--get-custom-rules (language)
   "Return the set of custom rules for LANGUAGE."
   (cadr
-   (segment--get-ruleset-by-lang language segment-custom-rules-regex-list)))
+   (sentex--get-ruleset-by-lang language sentex-custom-rules-regex-list)))
 
-(defun segment--build-rule-list (&optional language)
+(defun sentex--build-rule-list (&optional language)
   "Build ruleset list for LANGUAGE.
 Add any additional rules to the converted rulesets."
-  (setq segment-current-ruleset
+  (setq sentex-current-ruleset
         (append
-         (reverse (segment--get-lang-ruleset-from-file
-                   (or language segment-current-language)
-                   (segment--current-framework-file)))
-         (segment--get-custom-rules (or language segment-current-language))))
-  (setq segment-current-break-rules
-        (segment--get-breaking-rules segment-current-ruleset)))
+         (reverse (sentex--get-lang-ruleset-from-file
+                   (or language sentex-current-language)
+                   (sentex--current-framework-file)))
+         (sentex--get-custom-rules (or language sentex-current-language))))
+  (setq sentex-current-break-rules
+        (sentex--get-breaking-rules sentex-current-ruleset)))
 
-(defun segment--update-current-ruleset (symbol newval _operation _where)
-  "Update `segment-current-ruleset' as needed.
+(defun sentex--update-current-ruleset (symbol newval _operation _where)
+  "Update `sentex-current-ruleset' as needed.
 \nThis is a variable watcher function for
-`segment-ruleset-framework'.
+`sentex-ruleset-framework'.
 Args SYMBOL NEWVAL OPERATION and WHERE are required by it."
   (set-default symbol newval)
-  (segment--build-rule-list))
+  (sentex--build-rule-list))
 
 ;;; roll our own movement cmds:
 ;;;###autoload
-(defun segment-forward-sentence (&optional arg)
+(defun sentex-forward-sentence (&optional arg)
   "Call `forward-sentence' ARG number of times.
-Check if point matches any break rules for `segment-current-language',
+Check if point matches any break rules for `sentex-current-language',
 and if it does, run `forward-sentence' again and check again."
   (interactive "p")
   (dotimes (_count (or arg 1))
     (forward-sentence)
     (while
-        (segment--looking-back-forward-map segment-current-language)
+        (sentex--looking-back-forward-map sentex-current-language)
       (forward-sentence))))
 
 ;;;###autoload
-(defun segment-backward-sentence (&optional arg)
+(defun sentex-backward-sentence (&optional arg)
   "Call `backward-sentence' ARG number of times.
-Check if point matches any break rules for `segment-current-language',
+Check if point matches any break rules for `sentex-current-language',
 and if it does, run `backward-sentence' again and check again."
   (interactive "p")
   (dotimes (_count (or arg 1))
     (backward-sentence)
     (while
-        (segment--looking-back-forward-map segment-current-language
+        (sentex--looking-back-forward-map sentex-current-language
                                            :moving-backward)
       (backward-sentence))))
 
 ;;;###autoload
-(defun segment-kill-sentence (&optional arg)
+(defun sentex-kill-sentence (&optional arg)
   "Kill forwards from point to end of sentence.
 With ARG, kill that many more sentences."
   (interactive "p")
-  (kill-region (point) (progn (segment-forward-sentence arg) (point))))
+  (kill-region (point) (progn (sentex-forward-sentence arg) (point))))
 
-(defun segment--looking-back-forward-map (language &optional moving-backward)
+(defun sentex--looking-back-forward-map (language &optional moving-backward)
   "Return non-nil if we are at a non-break rule for LANGUAGE.
 MOVING-BACKWARD modifies the check for when we have moved backwards."
   (let* ((case-fold-search nil)
-         (regex-alist segment-current-ruleset)
-         (break-rules segment-current-break-rules))
+         (regex-alist sentex-current-ruleset)
+         (break-rules sentex-current-break-rules))
     ;; break rules first?:
     ;; only check for non-break rules if no break rule matched:
     ;; (unless
-    ;; (segment--test-rule-pairs break-rules moving-backward)
-    (segment--test-rule-pairs regex-alist moving-backward)))
+    ;; (sentex--test-rule-pairs break-rules moving-backward)
+    (sentex--test-rule-pairs regex-alist moving-backward)))
 ;; :non-break)))
 
-(defun segment--get-breaking-rules (regex-alist)
+(defun sentex--get-breaking-rules (regex-alist)
   "Collect the rules that mandate sentence breaks in REGEX-ALIST."
   (remove nil
           (mapcar (lambda (x)
@@ -267,7 +267,7 @@ MOVING-BACKWARD modifies the check for when we have moved backwards."
                       x))
                   regex-alist)))
 
-(defun segment--test-rule-pairs (regex-alist &optional moving-backward)
+(defun sentex--test-rule-pairs (regex-alist &optional moving-backward)
   "Return non-nil when when point is surrounded by an element in REGEX-ALIST.
 MOVING-BACKWARD makes adjustments based on where `backward-sentence' places point."
   (cl-dolist (reg-pair regex-alist)
@@ -294,5 +294,5 @@ MOVING-BACKWARD makes adjustments based on where `backward-sentence' places poin
            (not (plist-get reg-pair :break)))
       (cl-return reg-pair))))
 
-(provide 'segment)
-;;; segment.el ends here
+(provide 'sentex)
+;;; sentex.el ends here

@@ -1,8 +1,8 @@
-* segment
+* sentex
 
-This repo ports complex sentence-ending rules from OmegaT and the Okapi Framework to Emacs Lisp, and then provides sentence-based functions based on the rules. Two movement functions exist: =segment-forward-sentence= and =segment-backward-sentence=, as well as =segment-kill-sentence=.
+This repo ports complex sentence-ending rules from OmegaT and the Okapi Framework to Emacs Lisp, and then provides sentence-based functions based on the rules. Two movement functions exist: =sentex-forward-sentence= and =sentex-backward-sentence=, as well as =sentex-kill-sentence=.
 
-To set the framework to use, customize =segment-ruleset-framework=. To set the language ruleset to use, customize =segment-current-language=, or if you want it to be buffer-local, run =segment-set-language-for-buffer=. OmegaT and the Okapi Framework each support different languages, so if your language doesn't appear in the completion list, try using a different framework. Languages supported by the currently set framework are returned by =segment-get-valid-langs=.
+To set the framework to use, customize =sentex-ruleset-framework=. To set the language ruleset to use, customize =sentex-current-language=, or if you want it to be buffer-local, run =sentex-set-language-for-buffer=. OmegaT and the Okapi Framework each support different languages, so if your language doesn't appear in the completion list, try using a different framework. Languages supported by the currently set framework are returned by =sentex-get-valid-langs=.
 
 As this is new code, it hasn't been tested much. In particular, I don't yet know how it interacts with custom =sentence-end= values, or other possible snags, such as anyone else's Emacs other than mine (or even mine).
 
@@ -12,11 +12,11 @@ OmegaT and the Okapi Framework use ICU regular expressions stored in SRX files (
 
 The rules have been converted in part by hand (the Unicode property parts of the ICU regexes) and partly using =pcre2el= (for the rest). The process is ad-hoc, there may be errors, they'll be corrected as they're found.
 
-The bulk converted ruleset files used by =segment= have the suffix =-rules-converted.el=. There are three kinds: OmegaT, Okapi alt, and ICU4J.
+The bulk converted ruleset files used by =sentex= have the suffix =-rules-converted.el=. There are three kinds: OmegaT, Okapi alt, and ICU4J.
 
 * custom rules
 
-You can add your own custom rules by customizing =segment-custom-rules-regex-list=. See it's default value for the form the rules take.
+You can add your own custom rules by customizing =sentex-custom-rules-regex-list=. See it's default value for the form the rules take.
 
 * features
 
