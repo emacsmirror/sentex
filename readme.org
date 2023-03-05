@@ -16,7 +16,7 @@ The bulk converted ruleset files used by =sentex= have the suffix =-rules-conver
 
 * custom rules
 
-You can add your own custom rules by customizing =sentex-custom-rules-regex-list=. See it's default value for the form the rules take.
+You can add your own custom rules by customizing =sentex-custom-rules-regex-list=. See its default value for the form the rules take.
 
 * features
 
@@ -24,7 +24,7 @@ You can add your own custom rules by customizing =sentex-custom-rules-regex-list
 - add your own custom rules
 - doesn't assume sentences begin with a capital letter.
 - should work with filled text.
-- doesn't tell you to shut up and use two spaces for periods, as if that were a solution (what if you're not the one typing the spaces after the periods, and you have a whole book of periods? are you going to tell me to use a regex to replace all the single space periods with double spaces...?)
+- obviates the need to use two spaces for periods, which is not a solution if you have to work with texts that you are not authoring yourself.
 
 * contributing
 
