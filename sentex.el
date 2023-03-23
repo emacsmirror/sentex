@@ -247,7 +247,7 @@ With ARG, kill that many more sentences."
   (kill-region (point) (progn (sentex-forward-sentence arg) (point))))
 
 ;; FIXME: language arg redundant? break-rules redundant? everything redundant?
-(defun sentex--looking-back-forward-map (&optional language moving-backward)
+(defun sentex--looking-back-forward-map (&optional _language moving-backward)
   "Return non-nil if we are at a non-break rule for LANGUAGE.
 MOVING-BACKWARD modifies the check for when we have moved backwards."
   (let* ((case-fold-search nil)
