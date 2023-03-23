@@ -1,4 +1,4 @@
-;;; sentex.el --- Regexes for sentence segmentation rules  -*- lexical-binding: t; -*-
+;;; sentex.el --- Regex-based sentence navigation  -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2022 Marty Hiatt <martianhiatus AT riseup.net>
 ;; Author: Marty Hiatt <martianhiatus AT riseup.net>
@@ -26,7 +26,8 @@
 ;; from OmegaT and Okapi Framework.
 
 ;; It provides `sentex-forward-sentence', `sentex-backward-sentence', and
-;; `sentex-kill-sentence'.
+;; `sentex-kill-sentence'. They aim to act like the built-in functions, but to
+;; intelligently ignore things like "e.g.", "i.e.", or "Mr." as ends of sentences.
 
 ;; Customize `sentex-ruleset-framework' to select which framework to use.
 ;; Call `sentex-set-language-for-buffer', or set `sentex-current-language'
