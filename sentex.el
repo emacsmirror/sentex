@@ -269,7 +269,8 @@ MOVING-BACKWARD modifies the check for when we have moved backwards."
 
 (defun sentex--test-rule-pairs (regex-alist &optional moving-backward)
   "Return non-nil when when point is surrounded by an element in REGEX-ALIST.
-MOVING-BACKWARD makes adjustments based on where `backward-sentence' places point."
+MOVING-BACKWARD makes adjustments based on where
+`backward-sentence' places point."
   (cl-dolist (reg-pair regex-alist)
     (when (and
            ;; FIXME: performance of this is terrible
