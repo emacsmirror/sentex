@@ -8,7 +8,7 @@ As this is new code, it hasn't been tested much. In particular, I don't yet know
 
 * conversion
 
-OmegaT and the Okapi Framework use ICU regular expressions stored in SRX files (copied into this repo) to create sophisticated rules for segmenting texts. Each rule has a before break and after break regular expression, as well as a boolean break or don't break value.
+OmegaT and the Okapi Framework use ICU regular expressions stored in SRX files to create sophisticated rules for segmenting texts. Each rule has a before break and after break regular expression, as well as a boolean break or don't break value. The original regexes and code to convert them to emacs lisp is in https://codeberg.org/martianh/sentex-convert.
 
 The rules have been converted in part by hand (the Unicode property parts of the ICU regexes) and partly using =pcre2el= (for the rest). The process is ad-hoc, there may be errors, they'll be corrected as they're found.
 
