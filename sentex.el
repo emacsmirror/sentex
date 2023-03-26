@@ -61,8 +61,8 @@
      (("[JS]r\\."
        "[[:space:]][[:lower:]]" :break nil)
 
-      ;; this is wrong, but how to differentiate U.S. ending a sentence, and
-      ;; U.S. followed by a proper noun?
+      ;; FIXME: this is wrong, but how to differentiate U.S. ending a sentence, and
+      ;; U.S. followed by a proper noun ("the U.S. Army")?
       ;; omegat's U.K. rule only mandates a space, which is also imperfect
       ("U\\.S\\."
        "[[:space:]][[:lower:]]" :break nil)
