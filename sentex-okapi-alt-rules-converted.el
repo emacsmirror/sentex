@@ -1,3 +1,5 @@
+;; -*- mode: emacs-lisp -*-
+
 (("Polish"
   (("\\badw\\.[[:space:]]" "" :break nil)
    ("\\bafr\\.[[:space:]]" "" :break nil)

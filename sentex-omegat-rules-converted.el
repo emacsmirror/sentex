@@ -1,3 +1,5 @@
+;; -*- mode: emacs-lisp -*-
+
 (("Catalan"
   (("Dr\\." "[[:space:]]" :break nil)
    ("Dra\\." "[[:space:]]" :break nil)

@@ -1,3 +1,5 @@
+;; -*- mode: emacs-lisp -*-
+
 (("English"
   (("\\b\\(\\(?:Brig\\|C\\(?:apt\\|mnd\\|ol\\)\\|Dr\\|Gen\\|Hon\\|Ibid\\|M\\(?:aj\\|rs\\|[rs]\\)\\|Pr\\(?:es\\)?\\|Re\\(?:vd\\|[pv]\\)\\|S\\(?:en\\|g?t\\)\\|comp\\)\\)\\." "[[:space:]]" :break nil)
    ("[!?][])]" "[[:space:]]*[[:alpha:]]" :break nil)
