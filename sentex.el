@@ -36,9 +36,6 @@
 ;; using a different one.
 
 ;;; Code:
-
-(require 'sentex-convert)
-(require 'sentex-regexes)
 (require 'xml)
 (require 'dom)
 
