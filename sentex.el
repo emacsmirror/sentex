@@ -294,5 +294,18 @@ MOVING-BACKWARD makes adjustments based on where
            (not (plist-get reg-pair :break)))
       (cl-return reg-pair))))
 
+(defvar sentex-mode-map
+  (let ((keymap (make-keymap)))
+    (define-key keymap [remap forward-sentence] #'sentex-forward-sentence)
+    (define-key keymap [remap backward-sentence] #'sentex-backward-sentence)
+    (define-key keymap [remap kill-sentence] #'sentex-kill-sentence)
+    keymap)
+  "Keymap for `sentex-minor-mode'.")
+
+;;;###autoload
+(define-minor-mode sentex-minor-mode
+  "Locally remap sentence navigation commands to use their `sentex' counterparts."
+  :lighter " Sentex" :keymap sentex-mode-map)
+
 (provide 'sentex)
 ;;; sentex.el ends here
