@@ -1,4 +1,4 @@
-;;; sentex.el --- Regex-based sentence navigation  -*- lexical-binding: t; -*-
+;;; sentex.el --- Regex-based sentence navigation rules  -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2022 Marty Hiatt <martianhiatus AT riseup.net>
 ;; Author: Marty Hiatt <martianhiatus AT riseup.net>
