@@ -113,11 +113,11 @@ by a framework.
 (defvar sentex-directory
   (file-name-directory (locate-library "sentex")))
 (defvar sentex-icu4j-file
-  (concat sentex-directory "sentex-icu4j-rules-converted.el"))
+  (concat sentex-directory "sentex-icu4j-rules-converted.eld"))
 (defvar sentex-omegat-file
-  (concat sentex-directory "sentex-omegat-rules-converted.el"))
+  (concat sentex-directory "sentex-omegat-rules-converted.eld"))
 (defvar sentex-okapi-alt-file
-  (concat sentex-directory "sentex-okapi-alt-rules-converted.el"))
+  (concat sentex-directory "sentex-okapi-alt-rules-converted.eld"))
 
 ;;; getting and setting language:
 (defun sentex--read-file (file)
