@@ -1,5 +1,4 @@
-;; -*- mode: emacs-lisp -*-
-
+;;; -*- coding: utf-8; mode: lisp-data -*-
 (("Catalan"
   (("Dr\\." "[[:space:]]" :break nil)
    ("Dra\\." "[[:space:]]" :break nil)

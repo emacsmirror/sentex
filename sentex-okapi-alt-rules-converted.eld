@@ -1,5 +1,4 @@
-;; -*- mode: emacs-lisp -*-
-
+;;; -*- coding: utf-8; mode: lisp-data -*-
 (("Polish"
   (("\\badw\\.[[:space:]]" "" :break nil)
    ("\\bafr\\.[[:space:]]" "" :break nil)
