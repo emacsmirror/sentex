@@ -6,6 +6,10 @@ To set the framework to use, customize =sentex-ruleset-framework=. To set the la
 
 As this is new code, it hasn't been tested much. In particular, I don't yet know how it interacts with custom =sentence-end= values, or other possible snags, such as anyone else's Emacs other than mine (or even mine).
 
+* minor mode
+
+Sentex provides =sentex-minor-mode=, which you can enable if you want to map sentex moving and killing functions over the default functions.
+
 * conversion
 
 OmegaT and the Okapi Framework use ICU regular expressions stored in SRX files to create sophisticated rules for segmenting texts. Each rule has a before break and after break regular expression, as well as a boolean break or don't break value. The original regexes and code to convert them to emacs lisp is in [[https://codeberg.org/martianh/sentex-convert][sentex-convert]].
