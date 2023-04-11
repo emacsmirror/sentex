@@ -173,7 +173,7 @@ your desired language does not appear, customize
 ;;; building current ruleset:
 (defun sentex--get-ruleset-by-lang (language converted-file-set)
   "Get ruleset for LANGUAGE from CONVERTED-FILE-SET."
-  (dolist (x converted-file-set)
+  (cl-dolist (x converted-file-set)
     (when (equal language
                  (car x))
       (cl-return x))))
