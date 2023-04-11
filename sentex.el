@@ -234,7 +234,7 @@ and if it does, run `backward-sentence' again and check again."
     (backward-sentence)
     (while
         (sentex--looking-back-forward-map sentex-current-language
-                                           :moving-backward)
+                                          :moving-backward)
       (backward-sentence))))
 
 ;;;###autoload
