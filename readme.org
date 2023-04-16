@@ -2,6 +2,23 @@
 
 This repo ports complex sentence-ending rules from OmegaT and the Okapi Framework to Emacs Lisp, and then provides sentence-based functions based on the rules. Two movement functions exist: =sentex-forward-sentence= and =sentex-backward-sentence=, as well as =sentex-kill-sentence=.
 
+* install
+
+=sentex= is now on MELPA, so you can =package-install RET sentex RET=.
+
+Or with =straight.el= you should just be able to
+
+#+begin_src emacs-lisp
+(use-package sentex
+  :straight (sentex :type git
+                    :repo "https://codeberg.org/martianh/sentex"
+                    :files ("*.el" "*.eld")))
+
+#+end_src
+
+Note the =eld= files, which are data files containing the regexes.
+
+* usage
 To set the framework to use, customize =sentex-ruleset-framework=. To set the language ruleset to use, customize =sentex-current-language=, or if you want it to be buffer-local, run =sentex-set-language-for-buffer=. OmegaT and the Okapi Framework each support different languages, so if your language doesn't appear in the completion list, try using a different framework. Languages supported by the currently set framework are returned by =sentex-get-valid-langs=.
 
 As this is new code, it hasn't been tested much. In particular, I don't yet know how it interacts with custom =sentence-end= values, or other possible snags, such as anyone else's Emacs other than mine (or even mine).
